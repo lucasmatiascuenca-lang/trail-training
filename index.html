@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Trail Run Training</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#E85D2F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Trail Train">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --orange: #E85D2F;
+    --orange-dark: #C44A20;
+    --orange-light: #FF7A4D;
+    --bg: #0F0F0F;
+    --surface: #1A1A1A;
+    --surface2: #242424;
+    --surface3: #2E2E2E;
+    --text: #F0EDE8;
+    --text-muted: #888;
+    --text-dim: #555;
+    --green: #4CAF7D;
+    --blue: #5B9BD5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HOME SCREEN */
+  .home {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-header {
+    padding: 48px 24px 24px;
+    background: linear-gradient(180deg, #1A0A05 0%, var(--bg) 100%);
+  }
+
+  .home-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .home-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .home-title span { color: var(--orange); }
+
+  .home-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    font-weight: 300;
+  }
+
+  .week-pills {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .week-pills::-webkit-scrollbar { display: none; }
+
+  .week-pill {
+    flex-shrink: 0;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--surface3);
+    background: var(--surface);
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .week-pill.active {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: white;
+  }
+
+  .sessions-list {
+    flex: 1;
+    padding: 8px 24px 100px;
+  }
+
+  .phase-label {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 24px 0 12px;
+    font-weight: 500;
+  }
+
+  .session-card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .session-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-accent, var(--orange));
+    border-radius: 3px 0 0 3px;
+  }
+  .session-card:active { transform: scale(0.98); background: var(--surface2); }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .card-type {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .card-badge {
+    background: var(--surface3);
+    border-radius: 8px;
+    padding: 6px 10px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .badge-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .badge-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+  .card-meta {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .meta-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--card-accent, var(--orange));
+    flex-shrink: 0;
+  }
+
+  /* DETAIL SCREEN */
+  .detail {
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+  }
+
+  .detail-header {
+    padding: 48px 24px 20px;
+    background: linear-gradient(180deg, #1A0A05 0%, var(--bg) 80%);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--orange);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 16px;
+    width: fit-content;
+  }
+  .back-arrow {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(232,93,47,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+
+  .detail-type {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .detail-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .phase-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .phase-tabs::-webkit-scrollbar { display: none; }
+
+  .phase-tab {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--surface3);
+    background: var(--surface);
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .phase-tab.active {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: white;
+  }
+  .phase-tab .tab-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-content {
+    padding: 16px 24px 100px;
+    flex: 1;
+  }
+
+  .block-section {
+    margin-bottom: 20px;
+  }
+
+  .block-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .block-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(232,93,47,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .block-info {}
+  .block-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .block-time {
+    font-size: 12px;
+    color: var(--orange);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 1px;
+  }
+
+  .exercises-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .exercise-item {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid var(--surface2);
+  }
+
+  .exercise-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .exercise-name {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text);
+    flex: 1;
+    line-height: 1.3;
+  }
+
+  .exercise-sets {
+    flex-shrink: 0;
+    background: var(--surface3);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--orange);
+    white-space: nowrap;
+  }
+
+  .exercise-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .video-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(232,93,47,0.12);
+    border-radius: 20px;
+    color: var(--orange-light);
+    font-size: 11px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid rgba(232,93,47,0.25);
+    transition: background 0.15s;
+  }
+  .video-btn:hover { background: rgba(232,93,47,0.2); }
+  .video-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  .pause-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(91,155,213,0.08);
+    border-radius: 10px;
+    border: 1px solid rgba(91,155,213,0.15);
+    font-size: 12px;
+    color: var(--blue);
+    margin-top: 8px;
+  }
+
+  .section-divider {
+    height: 1px;
+    background: var(--surface2);
+    margin: 20px 0;
+  }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    background: rgba(15,15,15,0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--surface2);
+    display: flex;
+    padding: 12px 0 20px;
+    z-index: 100;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .nav-icon {
+    font-size: 20px;
+    opacity: 0.5;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .nav-item.active .nav-icon { opacity: 1; transform: scale(1.1); }
+  .nav-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .nav-item.active .nav-label { color: var(--orange); }
+
+  /* Animations */
+  .fade-in { animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .screen { display: none; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* Progress dots */
+  .progress-bar {
+    display: flex;
+    gap: 4px;
+    margin-top: 12px;
+  }
+  .prog-dot {
+    height: 3px;
+    flex: 1;
+    border-radius: 3px;
+    background: var(--surface3);
+  }
+  .prog-dot.done { background: var(--orange); }
+  .prog-dot.current { background: var(--orange-light); }
+
+  /* Types colors */
+  .type-hiper { --card-accent: #9B59B6; }
+  .type-desc  { --card-accent: #3498DB; }
+  .type-max   { --card-accent: #E85D2F; }
+  .type-pot   { --card-accent: #F39C12; }
+
+  .type-hiper .card-type { color: #9B59B6; }
+  .type-desc  .card-type { color: #3498DB; }
+  .type-max   .card-type { color: var(--orange); }
+  .type-pot   .card-type { color: #F39C12; }
+
+  .detail-hiper .detail-type { color: #9B59B6; }
+  .detail-desc  .detail-type { color: #3498DB; }
+  .detail-max   .detail-type { color: var(--orange); }
+  .detail-pot   .detail-type { color: #F39C12; }
+
+  /* ── BLOCK TIMER ── */
+  .block-timer-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    background: var(--surface2);
+    border-radius: 14px;
+    padding: 10px 14px;
+  }
+  .timer-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: var(--text);
+    min-width: 90px;
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .timer-display.running { color: var(--orange-light); }
+  .timer-display.warning { color: #F39C12; }
+  .timer-display.done    { color: var(--green); }
+
+  .timer-btns {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-left: auto;
+  }
+  .timer-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: transform 0.1s, opacity 0.1s;
+    flex-shrink: 0;
+  }
+  .timer-btn:active { transform: scale(0.9); }
+  .btn-play  { background: var(--orange); color: white; }
+  .btn-pause { background: var(--surface3); color: var(--text); }
+  .btn-reset { background: var(--surface3); color: var(--text-muted); font-size: 13px; }
+
+  .timer-progress-ring {
+    position: relative;
+    width: 44px; height: 44px;
+    flex-shrink: 0;
+  }
+  .timer-progress-ring svg { transform: rotate(-90deg); }
+  .ring-bg   { fill: none; stroke: var(--surface3); stroke-width: 3; }
+  .ring-fill { fill: none; stroke: var(--orange); stroke-width: 3;
+               stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+
+  /* ── WEIGHT NOTES ── */
+  .weight-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .weight-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 5px 10px;
+    border: 1px solid var(--surface3);
+    flex: 1;
+    min-width: 120px;
+    transition: border-color 0.2s;
+  }
+  .weight-input-wrap:focus-within {
+    border-color: var(--orange);
+  }
+  .weight-icon { font-size: 13px; flex-shrink: 0; }
+  .weight-input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    width: 100%;
+    min-width: 0;
+  }
+  .weight-input::placeholder { color: var(--text-dim); font-size: 12px; }
+  .weight-save-btn {
+    background: rgba(76,175,125,0.15);
+    border: 1px solid rgba(76,175,125,0.3);
+    border-radius: 8px;
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .weight-save-btn:active { background: rgba(76,175,125,0.3); }
+  .weight-saved-tag {
+    display: none;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 500;
+  }
+  .weight-saved-tag.visible { display: flex; }
+
+  /* ── WEIGHT HISTORY MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 24px 40px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle {
+    width: 40px; height: 4px;
+    border-radius: 2px;
+    background: var(--surface3);
+    margin: 0 auto 20px;
+  }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .modal-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
+  .history-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--surface2);
+  }
+  .history-entry:last-child { border-bottom: none; }
+  .history-date { font-size: 11px; color: var(--text-dim); }
+  .history-val { font-size: 14px; font-weight: 600; color: var(--text); }
+  .history-del { font-size: 14px; cursor: pointer; color: var(--text-dim); padding: 4px 8px; }
+  .history-empty { font-size: 13px; color: var(--text-dim); text-align: center; padding: 20px 0; }
+  .modal-close-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--surface2);
+    border: none;
+    border-radius: 12px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+
+  /* floating timer pill when scrolled */
+  .floating-timer {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--orange);
+    color: white;
+    border-radius: 24px;
+    padding: 8px 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    z-index: 50;
+    display: none;
+    box-shadow: 0 4px 20px rgba(232,93,47,0.5);
+    pointer-events: none;
+  }
+  .floating-timer.visible { display: block; }
+</style>
+</head>
+<body>
+
+<!-- HOME SCREEN -->
+<div id="screen-home" class="screen active">
+  <div class="home-header">
+    <div class="home-eyebrow">🏔️ Trail Running</div>
+    <div class="home-title">TRAIN<span>ING</span><br>PLAN</div>
+    <div class="home-subtitle">4 semanas · 3 días por semana · Trail Running</div>
+  </div>
+
+  <div class="week-pills">
+    <div class="week-pill active" onclick="filterWeek('all')">Todo</div>
+    <div class="week-pill" onclick="filterWeek('max')">Sem 1 · Fuerza Máx</div>
+    <div class="week-pill" onclick="filterWeek('pot')">Sem 2 · Potencia</div>
+    <div class="week-pill" onclick="filterWeek('hiper')">Sem 3 · Hipertrofia</div>
+    <div class="week-pill" onclick="filterWeek('desc')">Sem 4 · Resistencia</div>
+  </div>
+
+  <div class="sessions-list" id="sessions-list"></div>
+</div>
+
+<!-- DETAIL SCREEN -->
+<div id="screen-detail" class="screen">
+  <div class="detail-header" id="detail-header"></div>
+  <div class="detail-content" id="detail-content"></div>
+</div>
+
+<!-- Weight history modal -->
+<div class="modal-overlay" id="weight-modal" onclick="closeWeightModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-ex-name">Ejercicio</div>
+    <div class="modal-subtitle" id="modal-ex-sub">Historial de cargas</div>
+    <div id="modal-history-list"></div>
+    <button class="modal-close-btn" onclick="closeWeightModal()">Cerrar</button>
+  </div>
+</div>
+
+<!-- Floating timer pill -->
+<div class="floating-timer" id="floating-timer">00:00</div>
+
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="goHome()">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label">Inicio</div>
+  </div>
+  <div class="nav-item" onclick="">
+    <div class="nav-icon">📅</div>
+    <div class="nav-label">Semana</div>
+  </div>
+  <div class="nav-item" onclick="">
+    <div class="nav-icon">📊</div>
+    <div class="nav-label">Progreso</div>
+  </div>
+</div>
+
+<script>
+const WORKOUTS = [
+  // ──── HIPERTROFIA FUNCIONAL 1 ────
+  {
+    id: 'hif1', type: 'hiper', typeName: 'Hipertrofia Funcional',
+    name: 'Hipertrofia Funcional 1', num: '1',
+    date: '12-05-2026', totalMin: 49,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '15\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '5\'',
+            exercises: [
+              { name: 'Assault bike o remo suave', sets: '3 min', note: 'Si la tienen la usan', url: null },
+              { name: 'Skipping bajo con braceo activo', sets: '2×20m', url: 'https://youtube.com/shorts/hI3CO9admoc' },
+              { name: 'Jump rope suave o pogo jumps', sets: '2×20s', url: 'https://youtube.com/shorts/p6SAfr8kN6w' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '5\'',
+            exercises: [
+              { name: 'Tobillo en pared', sets: '2×8/lado', url: 'https://youtube.com/shorts/r9Cj3D8hWmM' },
+              { name: '90/90 dinámico', sets: '2×5/lado', url: 'https://youtube.com/shorts/1PItwcbeFb0' },
+              { name: 'Rotación torácica en cuadrupedia', sets: '2×6/lado', url: 'https://youtube.com/shorts/MrAK_tC1OvI' },
+            ]
+          },
+          {
+            name: 'Bloque 3', time: '5\'',
+            note: 'Primera Activación Neural preparatoria',
+            exercises: [
+              { name: 'Snap down + stick', sets: '3×4', url: 'https://youtube.com/shorts/NSU8RQCyD08' },
+              { name: 'Skater jump corto con frenado', sets: '2×4/lado', url: 'https://youtube.com/shorts/qM5jviFhw9U' },
+            ],
+            pause: '30-40 s'
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '29\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '9\'',
+            exercises: [
+              { name: 'Split squat delantero con mancuernas', sets: '3×8/pierna RIR 2', url: 'https://youtube.com/shorts/sw4MzpC8l58' },
+              { name: 'Remo a un brazo con mancuerna apoyado', sets: '3×10/lado RIR 2', url: 'https://youtube.com/shorts/msjE_AWixcM' },
+            ],
+            pause: '30s entre ejercicios · 60-75s al final'
+          },
+          {
+            name: 'Bloque 2', time: '9\'',
+            exercises: [
+              { name: 'Step-up medio con control', sets: '3×8/pierna', note: 'Énfasis en subir con el pie de apoyo, sin impulso', url: 'https://youtube.com/shorts/YRwEPN3XBPI' },
+              { name: 'Jalón al pecho neutro o dominada asistida', sets: '3×8-10', url: 'https://youtube.com/shorts/riFu4s62nr4' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Preventivos', time: '7\'',
+            exercises: [
+              { name: 'Tibial anterior raises unilateral', sets: '2×15-20/lado', url: 'https://youtube.com/shorts/VgSvTeUA-ts' },
+              { name: 'Copenhagen corto', sets: '2×15s/lado', url: 'https://youtube.com/shorts/sBB1tMDDCns' },
+              { name: 'Psoas march con banda', sets: '2×10/lado', url: 'https://youtube.com/shorts/g49A838moBs' },
+            ]
+          },
+          {
+            name: 'Bloque 4 – Core', time: '4\'',
+            exercises: [
+              { name: 'Pallof press con paso lateral', sets: '2×8/lado', url: 'https://youtube.com/shorts/N5mqDaPZjic' },
+              { name: 'Dead bug contralateral', sets: '2×8/lado', url: 'https://youtube.com/shorts/VAVrsPX9GHY' },
+              { name: 'Side plank corta', sets: '2×20s/lado', url: 'https://youtube.com/shorts/Vm5-dN5dfkE' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Vuelta a la calma', time: '5\'', icon: '🌿',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '5\'',
+            exercises: [
+              { name: 'Respiración 90/90', sets: '2 min', url: 'https://youtube.com/shorts/2gV3CGPiMBE' },
+              { name: 'Movilidad de tobillo suave', sets: '1×8', url: 'https://youtube.com/shorts/U3wQ7kLS0B0' },
+              { name: 'Caminata liviana', sets: '2 min', url: null },
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  // ──── HIPERTROFIA FUNCIONAL 2 ────
+  {
+    id: 'hif2', type: 'hiper', typeName: 'Hipertrofia Funcional',
+    name: 'Hipertrofia Funcional 2', num: '2',
+    date: '14-05-2026', totalMin: 49,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '15\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '5\'',
+            exercises: [
+              { name: 'Bike suave con cadencia alta', sets: '3 min', note: 'Si la tenés la usás', url: null },
+              { name: 'Caminata lateral con minibanda', sets: '2×12 pasos', url: 'https://youtube.com/shorts/N28HpdezG7Q' },
+              { name: 'Ankle pops suaves', sets: '2×12', url: 'https://youtube.com/shorts/OZQ0Mm3TrZw' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '5\'',
+            exercises: [
+              { name: 'Hip hinge drill con palo', sets: '2×8', url: 'https://youtube.com/shorts/BBd7_9WkUh8' },
+              { name: 'Flexor de cadera dinámico', sets: '2×6/lado', url: 'https://youtube.com/shorts/kGpg_zdVLBY' },
+              { name: 'Rotación torácica en Split', sets: '2×6/lado', url: 'https://youtube.com/shorts/c0uc4FT9dUM' },
+            ]
+          },
+          {
+            name: 'Bloque 3', time: '5\'',
+            note: 'Primera Activación Neural preparatoria',
+            exercises: [
+              { name: 'Kettlebell swing técnico', sets: '3×6', url: 'https://youtube.com/shorts/TIy6s4O2bOY' },
+              { name: 'Med ball chest pass (acostado/a)', sets: '3×5', url: 'https://youtube.com/shorts/NxJDDhUv234' },
+            ],
+            pause: '40-50 s'
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '29\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '9\'',
+            exercises: [
+              { name: 'RDL con barra o trap bar desde bloques', sets: '3×8 65-70% RIR 2', url: 'https://youtube.com/shorts/9z6AYqXkBbY' },
+              { name: 'Press inclinado con mancuernas', sets: '3×8-10 RIR 2', url: 'https://youtube.com/shorts/DfgI6sGn9iQ' },
+            ],
+            pause: '60-75 s'
+          },
+          {
+            name: 'Bloque 2', time: '9\'',
+            exercises: [
+              { name: 'Hip thrust a una pierna en banco', sets: '3×8/lado', url: 'https://youtube.com/shorts/VHjDznl5Nfw' },
+              { name: 'Landmine press o press medio arrodillado', sets: '3×8/lado', note: 'Funcionalidad del torso sin rigidez innecesaria', url: 'https://youtube.com/watch?v=fx6lSVNvu-4' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Preventivos', time: '7\'',
+            exercises: [
+              { name: 'Tibial posterior / calf raise con control del arco', sets: '2×12', note: 'OBSERVEN CÓMO DEBEN ACOMODAR EL ARCO DEL PIE', url: 'https://youtube.com/shorts/eNtGDOAlISE' },
+              { name: 'Glúteo medio minibanda o Pelota', sets: '2×15', url: 'https://youtube.com/shorts/cY4YRHZtdq0' },
+              { name: 'Aductores máquina o squeeze isométrico', sets: '2×12 o 20s', url: 'https://youtube.com/shorts/O2KzAeZjAvM' },
+            ]
+          },
+          {
+            name: 'Bloque 4 – Core', time: '4\'',
+            exercises: [
+              { name: 'Body saw en TRX o sliders', sets: '2×8', url: 'https://youtube.com/shorts/BDM2uWyuM60' },
+              { name: 'Farmer carry unilateral', sets: '2×20m/lado', url: 'https://youtube.com/shorts/fdRD8FJ0QWs' },
+              { name: 'Bird dog con pausa', sets: '2×8/lado', url: 'https://youtube.com/shorts/bR6Ol4kNvsw' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Vuelta a la calma', time: '5\'', icon: '🌿',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '5\'',
+            exercises: [
+              { name: 'Respiración diafragmática', sets: '2 min', url: 'https://youtube.com/watch?v=T96Bl1Md_Oc' },
+              { name: 'Movilidad suave de cadera/isquios', sets: '2-3 min', url: 'https://youtube.com/shorts/eI2Uv2jwxu4' },
+              { name: 'Liberación plantar opcional', sets: '', url: 'https://youtube.com/shorts/QxxhPtTcIT0' },
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  // ──── HIPERTROFIA FUNCIONAL 3 ────
+  {
+    id: 'hif3', type: 'hiper', typeName: 'Hipertrofia Funcional',
+    name: 'Hipertrofia Funcional 3', num: '3',
+    date: '15-05-2026', totalMin: 49,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '15\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '5\'',
+            exercises: [
+              { name: 'Remo o bike suave', sets: '2 min', url: null },
+              { name: 'Skipping suave', sets: '2×15m', url: null },
+              { name: 'Jumping jacks bajos', sets: '2×12', url: null },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '5\'',
+            exercises: [
+              { name: 'Tobillo en pared', sets: '1×8', url: 'https://youtube.com/shorts/EWJcpAgr1Lo' },
+              { name: '90/90', sets: '1×20s/lado', url: 'https://youtube.com/shorts/jyd_9UKp9jY' },
+              { name: 'Apertura torácica', sets: '1×6/lado', url: 'https://youtube.com/shorts/b-Xa3RTpiBo' },
+              { name: 'Sentadilla profunda asistida', sets: '1×20s', url: 'https://youtube.com/shorts/Wf5vveSPtwg' },
+            ]
+          },
+          {
+            name: 'Bloque 3', time: '5\'',
+            note: 'Primera Activación Neural preparatoria',
+            exercises: [
+              { name: 'Drop squat / snap down', sets: '2×4', url: 'https://youtube.com/shorts/cOx1SD62pk0' },
+              { name: 'Pogo jumps', sets: '2×10', url: 'https://youtube.com/shorts/L_khHgMz9uU' },
+              { name: 'Step-up dinámico sin carga', sets: '2×6/lado', url: 'https://youtube.com/shorts/7ch6Xb4mRa0' },
+            ],
+            pause: '30-40 s'
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '29\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '9\'',
+            exercises: [
+              { name: 'Goblet squat liviana', sets: '2×10 RIR 3-4', url: 'https://youtube.com/shorts/dBnNCOtuGNQ' },
+              { name: 'TRX row', sets: '2×10-12', url: 'https://youtube.com/shorts/Cpn2P7vn2vs' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '9\'',
+            exercises: [
+              { name: 'Push-up inclinada o press liviano', sets: '2×10', url: 'https://youtube.com/shorts/-QakUB1m8PY' },
+              { name: 'Split stance cable row o banda', sets: '2×10/lado', url: 'https://youtube.com/shorts/txxQVhcEBDk' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Preventivos', time: '7\'',
+            exercises: [
+              { name: 'Tibial anterior', sets: '2×12-15', url: 'https://youtube.com/shorts/ZSgZVJ0vM4M' },
+              { name: 'Psoas march', sets: '2×8/lado', url: 'https://youtube.com/shorts/cGBb1f_XKos' },
+              { name: 'Glúteo medio banda', sets: '2×12', url: 'https://youtube.com/watch?v=Njg6ony_TUY' },
+              { name: 'Gemelo rápido-controlado', sets: '2×12', url: 'https://youtube.com/shorts/3ra-uyR1Aus' },
+            ]
+          },
+          {
+            name: 'Bloque 4 – Core', time: '4\'',
+            exercises: [
+              { name: 'Plancha frontal corta', sets: '2×20s', url: 'https://youtube.com/shorts/kWwDubwbHNg' },
+              { name: 'Pallof hold', sets: '2×15s/lado', url: 'https://youtube.com/shorts/vCMmKAnkE70' },
+              { name: 'Rotación torácica controlada', sets: '1-2×6', url: 'https://youtube.com/shorts/2et2ZXUk6co' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Vuelta a la calma', time: '5\'', icon: '🌿',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '5\'',
+            exercises: [
+              { name: 'Respiración diafragmática', sets: '2 min', url: 'https://youtube.com/watch?v=T96Bl1Md_Oc' },
+              { name: 'Movilidad Completa a demanda', sets: '2-3 min', url: null },
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  // ──── DESCARGAR SIN PERDER ────
+  {
+    id: 'dsp1', type: 'desc', typeName: 'Descarga Activa',
+    name: 'Descargar sin Perder', num: '1',
+    date: '19-05-2026', totalMin: 48,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '18\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            exercises: [
+              { name: 'Cuerda suave', sets: '3×30\'\'', url: null },
+              { name: 'Desplazamientos laterales cortos', sets: '2×15m', url: 'https://youtube.com/shorts/LWm1LnCt5og' },
+              { name: 'Step rápido en cajón bajo', sets: '2×20\'\'', url: 'https://youtube.com/shorts/wWyyJZICuOI' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '6\'',
+            exercises: [
+              { name: 'Adductor rock back', sets: '2×8/lado', url: 'https://youtube.com/shorts/nxuwq178gLA' },
+              { name: 'Split squat ankle mobilization', sets: '2×8/lado', url: 'https://youtube.com/shorts/7jOwuwNk8OM' },
+              { name: 'Open book', sets: '2×6/lado', url: 'https://youtube.com/shorts/cncdlzYmbxg' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Core', time: '5\'',
+            exercises: [
+              { name: 'Rollout con fitball', sets: '2×8', url: 'https://youtube.com/shorts/Mm_W3bq-Iro' },
+              { name: 'Suitcase carry', sets: '2×20m/lado', url: 'https://youtube.com/shorts/-n8CxwQwB-4' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '30\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '20\'',
+            exercises: [
+              { name: 'Landmine squat', sets: '3×10-12', url: 'https://youtube.com/watch?v=nSbQifT2OJw' },
+              { name: 'Reverse lunge con mancuerna', sets: '2×10/lado', url: 'https://youtube.com/shorts/i3TNJmnInI0' },
+              { name: 'Remo con cable sentado', sets: '3×12', url: 'https://youtube.com/watch?v=e39-6iowESY' },
+              { name: 'Push-up inclinada', sets: '2×10', url: 'https://youtube.com/shorts/wFyVi6mokDA' },
+            ]
+          },
+          {
+            name: 'Bloque 2 – Preventivos', time: '10\'',
+            exercises: [
+              { name: 'Tibial anterior isométrico', sets: '2×15\'\'', url: 'https://youtube.com/shorts/GftxNHghaLA' },
+              { name: 'Glúteo medio caminata con banda', sets: '2×12 pasos', url: 'https://youtube.com/shorts/ES_ZKBlslEc' },
+              { name: 'Psoas march', sets: '2×8', url: 'https://youtube.com/shorts/g49A838moBs' },
+            ]
+          },
+        ]
+      }
+    ]
+  },
+
+  // ──── DESCARGAR SIN PERDER 2 ────
+  {
+    id: 'dsp2a', type: 'desc', typeName: 'Descarga Activa',
+    name: 'Descargar sin Perder 2', num: '2a',
+    date: '21-05-2026', totalMin: 48,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '18\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            exercises: [
+              { name: 'Battle rope suave', sets: '3×20\'\'', url: 'https://youtube.com/shorts/e9QHh1cnwhQ' },
+              { name: 'Ankle pogo', sets: '2×10', url: 'https://youtube.com/shorts/SjHRwhGXBl8' },
+              { name: 'Skipping en escalera', sets: '2 pasadas', url: 'https://youtube.com/shorts/wcfd55KSktQ' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '6\'',
+            exercises: [
+              { name: 'World\'s greatest stretch', sets: '2×4/lado', url: 'https://youtube.com/watch?v=-CiWQ2IvY34' },
+              { name: 'Bisagra con palo', sets: '2×8', url: 'https://youtube.com/shorts/_3pb1iwYIGQ' },
+              { name: 'Reach through torácico', sets: '2×6/lado', url: 'https://youtube.com/shorts/_5fmxeAVofI' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Core', time: '5\'',
+            exercises: [
+              { name: 'Side plank con rodilla flexionada', sets: '2×20\'\'', url: 'https://youtube.com/shorts/OxUqMcC944g' },
+              { name: 'Dead bug con balón entre manos y rodillas', sets: '2×8', url: 'https://youtube.com/shorts/GryKLAOPUG8' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '30\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '20\'',
+            exercises: [
+              { name: 'Kettlebell deadlift', sets: '3×10', url: 'https://youtube.com/shorts/Ion1rtftuxY' },
+              { name: 'Hip thrust unipodal', sets: '2×10/lado', url: 'https://youtube.com/shorts/XIAEarO7o7g' },
+              { name: 'Landmine Push press', sets: '3×8/lado', url: 'https://youtube.com/shorts/kmAo1GxDJ6g' },
+              { name: 'TRX row', sets: '2×12', url: 'https://youtube.com/shorts/fAwrRJu5tw0' },
+            ]
+          },
+          {
+            name: 'Bloque 2 – Preventivos', time: '10\'',
+            exercises: [
+              { name: 'Tibial posterior', sets: '2×12', note: 'El Tercero 3', url: 'https://youtube.com/shorts/K_3T8nDkp2U' },
+              { name: 'Aductores isométricos con pelota', sets: '2×20\'\'', url: 'https://youtube.com/watch?v=T-Ben-ppf6w' },
+              { name: 'Glúteo medio banda', sets: '2×12', url: 'https://youtube.com/watch?v=Njg6ony_TUY' },
+            ]
+          },
+        ]
+      }
+    ]
+  },
+
+  // ──── DESCARGAR SIN PERDER 2 (22-05) ────
+  {
+    id: 'dsp2b', type: 'desc', typeName: 'Descarga Activa',
+    name: 'Descargar sin Perder 2', num: '2b',
+    date: '22-05-2026', totalMin: 48,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '18\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            exercises: [
+              { name: 'Shadow boxing con pasos', sets: '2×30\'\'', url: 'https://youtube.com/shorts/mpC4Eq39FqY' },
+              { name: 'Jumping jacks bajos', sets: '2×12', url: 'https://youtube.com/shorts/bT2iY8IjEU0' },
+              { name: 'Marcha de psoas en el piso', sets: '2×8', url: 'https://youtube.com/shorts/tpIGVM5gdRM' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '6\'',
+            exercises: [
+              { name: '90/90 suave', sets: '1×20\'\'/ lado', url: 'https://youtube.com/shorts/p2NUakSyUcE' },
+              { name: 'Tobillo en pared', sets: '1×8', url: 'https://youtube.com/shorts/EWJcpAgr1Lo' },
+              { name: 'Torácica en cuadrupedia', sets: '1×6', url: 'https://youtube.com/shorts/ukW6sofCX0w' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Core', time: '5\'',
+            exercises: [
+              { name: 'Bird dog', sets: '2×6/lado', url: 'https://youtube.com/shorts/vtwhC3tfVow' },
+              { name: 'Pallof hold', sets: '2×15\'\'/ lado', url: 'https://youtube.com/shorts/vCMmKAnkE70' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '30\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '20\'',
+            exercises: [
+              { name: 'Step-up dinámico', sets: '2×8/lado', url: 'https://youtube.com/shorts/UYMt-pxiwys' },
+              { name: 'Goblet squat liviana', sets: '2×10', url: 'https://youtube.com/shorts/M2WFgYumN_Q' },
+              { name: 'Remo con banda', sets: '2×10', url: 'https://youtube.com/watch?v=KmpDowjBY2A' },
+              { name: 'Press unilateral con mancuerna liviana', sets: '2×8/lado', url: 'https://youtube.com/shorts/msjE_AWixcM' },
+            ]
+          },
+          {
+            name: 'Bloque 2 – Preventivos', time: '10\'',
+            exercises: [
+              { name: 'Tibial anterior', sets: '1-2×12', url: 'https://youtube.com/shorts/VgSvTeUA-ts' },
+              { name: 'Psoas march', sets: '1-2×8', url: 'https://youtube.com/watch?v=O80fcsgtd88' },
+              { name: 'Gemelo bilateral rápido', sets: '1-2×12', url: 'https://youtube.com/shorts/EoOs-Dt94Dg' },
+            ]
+          },
+        ]
+      }
+    ]
+  },
+
+  // ──── FUERZA MÁXIMA 1 ────
+  {
+    id: 'fm1', type: 'max', typeName: 'Fuerza Máxima',
+    name: 'Fuerza Máxima 1', num: '1',
+    date: '26-05-2026', totalMin: 47,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '19\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            exercises: [
+              { name: 'Shadow boxing con desplazamientos cortos', sets: '3×30\'\'', url: 'https://youtube.com/shorts/njIBEALf9KI' },
+              { name: 'Step rápido en cajón bajo', sets: '2×20\'\'', url: 'https://youtube.com/shorts/hUM7q9YyAxs' },
+              { name: 'Skipping corto con braceo fuerte', sets: '2×15m', url: 'https://youtube.com/shorts/-OWBvfkptIk' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '7\'',
+            exercises: [
+              { name: 'Split squat ankle mobilization', sets: '2×8/lado', url: 'https://youtube.com/shorts/z6kvxJFkth8' },
+              { name: 'Adductor rock back', sets: '2×8/lado', url: 'https://youtube.com/shorts/e5NfKAEvmAA' },
+              { name: 'Open book torácico', sets: '2×6/lado', url: 'https://youtube.com/shorts/iToY215RGAQ' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Core', time: '5\'',
+            exercises: [
+              { name: 'Suitcase carry', sets: '2×20m/lado', url: 'https://youtube.com/shorts/-n8CxwQwB-4' },
+              { name: 'Dead bug con balón o mancuerna liviana', sets: '2×8/lado', url: 'https://youtube.com/shorts/6AO2LxpLGiA' },
+              { name: 'Pallof press isométrico', sets: '2×15\'\'/ lado', url: 'https://youtube.com/shorts/4EETveFoRJo' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '14\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '6\'',
+            exercises: [
+              { name: 'Sentadilla Frontal', sets: '4×4 RIR 2', url: 'https://youtube.com/shorts/nOilmCM2TPI' },
+              { name: 'Remo con Barra', sets: '4×5 RIR 2', url: 'https://youtube.com/shorts/NF4vmoXV5ys' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '8\'',
+            exercises: [
+              { name: 'Step-up alto con mancuerna contralateral', sets: '3×5/pierna', url: 'https://youtube.com/shorts/yHyrYdgE36M' },
+              { name: 'Jalón neutro o dominada asistida', sets: '3×6-8', url: 'https://youtube.com/shorts/Cotfl1DsVU0' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Vuelta a la calma', time: '7\'', icon: '🌿',
+        blocks: [
+          {
+            name: 'Bloque 1 – Preventivos', time: '7\'',
+            exercises: [
+              { name: 'Toe walks', sets: '2×15m', note: 'Caminata de Talones', url: 'https://youtube.com/watch?v=aZ15aYKjx58' },
+              { name: 'Tibial posterior con pelota entre talones', sets: '2×12', url: 'https://youtube.com/shorts/hNwUKDeBrCE' },
+              { name: 'Psoas isométrico en pared', sets: '2×20\'\'/pierna', url: 'https://youtube.com/shorts/XLqrmuTH9SQ' },
+              { name: 'Monster walk diagonal', sets: '2×10 pasos', url: 'https://youtube.com/watch?v=otrZdtPqJek' },
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  // ──── FUERZA MÁXIMA 2 ────
+  {
+    id: 'fm2', type: 'max', typeName: 'Fuerza Máxima',
+    name: 'Fuerza Máxima 2', num: '2',
+    date: '28-05-2026', totalMin: 47,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '19\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            exercises: [
+              { name: 'Battle rope suave', sets: '3×20\'\'', url: 'https://youtube.com/shorts/e9QHh1cnwhQ' },
+              { name: 'Lateral shuffle corto', sets: '2×10m ida y vuelta', url: 'https://youtube.com/shorts/O9zzo7oiyK4' },
+              { name: 'Ankle pogo jumps', sets: '2×10', url: 'https://youtube.com/shorts/SjHRwhGXBl8' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '7\'',
+            exercises: [
+              { name: 'Hip hinge drill con palo', sets: '2×8', url: 'https://youtube.com/shorts/s7PsLZ8Fi_E' },
+              { name: 'World\'s greatest stretch', sets: '2×4/lado', url: 'https://youtube.com/shorts/7XheaZERvBQ' },
+              { name: 'Reach through torácico', sets: '2×6/lado', url: 'https://youtube.com/shorts/_5fmxeAVofI' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Core', time: '5\'',
+            exercises: [
+              { name: 'Body saw en TRX o sliders', sets: '2×8', url: 'https://youtube.com/watch?v=U6zUaObgROo' },
+              { name: 'Side plank corta con rodilla flexionada', sets: '2×20\'\'/lado', url: 'https://youtube.com/shorts/Vm5-dN5dfkE' },
+              { name: 'Farmer carry unilateral', sets: '2×20m/lado', url: 'https://youtube.com/shorts/fdRD8FJ0QWs' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '14\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '6\'',
+            exercises: [
+              { name: 'Trap Bar Deadlift o Barra Común', sets: '4×4 RIR 2', url: 'https://youtube.com/shorts/ZJPZQklCSLs' },
+              { name: 'Press medio arrodillado con mancuerna o landmine press', sets: '3×6 RIR 2', url: 'https://youtube.com/watch?v=fx6lSVNvu-4' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '8\'',
+            exercises: [
+              { name: 'Hip thrust unipodal en banco', sets: '3×6', url: 'https://youtube.com/shorts/VHjDznl5Nfw' },
+              { name: 'Push-up inclinada con carga o tempo', sets: '3×8', url: 'https://youtube.com/shorts/hTm9vkhNCec' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Vuelta a la calma', time: '7\'', icon: '🌿',
+        blocks: [
+          {
+            name: 'Bloque 1 – Preventivos', time: '7\'',
+            exercises: [
+              { name: 'Tibial posterior / calf raise controlando arco', sets: '3×12', url: 'https://youtube.com/shorts/R0NywYQCGos' },
+              { name: 'Aductores squeeze con pelota o máquina', sets: '2×12', url: 'https://youtube.com/shorts/O2KzAeZjAvM' },
+              { name: 'Psoas isométrico en 90°', sets: '2×20\'\'/pierna', url: 'https://youtube.com/shorts/lhqch4w5xuE' },
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  // ──── FUERZA MÁXIMA 3 ────
+  {
+    id: 'fm3', type: 'max', typeName: 'Fuerza Máxima',
+    name: 'Fuerza Máxima 3', num: '3',
+    date: '29-05-2026', totalMin: 47,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '19\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            exercises: [
+              { name: 'Cuerda suave', sets: '3×20\'\'', note: 'Saltar la soga', url: null },
+              { name: 'Marcha de psoas con braceo', sets: '2×8/pierna', url: 'https://youtube.com/shorts/RzkFu1cv-qM' },
+              { name: 'Jumping jacks bajos', sets: '2×12', url: 'https://youtube.com/shorts/7Pxr4xOrhNk' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '7\'',
+            exercises: [
+              { name: '90/90 suave', sets: '1×20\'\'/lado', url: 'https://youtube.com/shorts/p2NUakSyUcE' },
+              { name: 'Tobillo en pared', sets: '1×8/lado', url: 'https://youtube.com/shorts/cAMDjBhhC7U' },
+              { name: 'Sentadilla profunda asistida con balanceo', sets: '1×20\'\'', url: 'https://youtube.com/shorts/CKPkOtxGcVw' },
+              { name: 'Rotación torácica', sets: '1×6/lado', url: 'https://youtube.com/shorts/MrAK_tC1OvI' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Core', time: '5\'',
+            exercises: [
+              { name: 'Bird dog con pausa', sets: '2×6/lado', url: 'https://youtube.com/shorts/Tjo5oYHoS8M' },
+              { name: 'Pallof hold', sets: '2×15\'\'/lado', url: 'https://youtube.com/shorts/4EETveFoRJo' },
+              { name: 'Plancha frontal corta', sets: '2×15-20\'\'', url: 'https://youtube.com/shorts/FJlhiD1ZgoI' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '14\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '6\'',
+            exercises: [
+              { name: 'Single Legs Snap down', sets: '2×4/lado', url: 'https://youtube.com/shorts/aESIyiqKctU' },
+              { name: 'Pogos', sets: '2×10', url: 'https://youtube.com/shorts/f0DLxTw-lZA' },
+              { name: 'Step-up dinámico sin carga', sets: '2×6/lado', url: 'https://youtube.com/shorts/7ch6Xb4mRa0' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '8\'',
+            exercises: [
+              { name: 'Goblet box squat liviana', sets: '2×8-10 RIR 3', url: 'https://youtube.com/shorts/HFCMk5eDm6c' },
+              { name: 'TRX row', sets: '2×10 RIR 3', url: 'https://youtube.com/shorts/mp-50tdOr6s' },
+              { name: 'Press unilateral con mancuerna liviana', sets: '2×8/lado RIR 3', url: 'https://youtube.com/shorts/jS6ivfSb32A' },
+              { name: 'Bíceps Concentrado con Mancuerna', sets: '2×8 RIR 3', url: 'https://youtube.com/shorts/eSpHxZideNY' },
+              { name: 'Tríceps Press Francés con Mancuerna', sets: '2×10 RIR 3', url: 'https://youtube.com/shorts/FxS8Qdm1ALU' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Vuelta a la calma', time: '7\'', icon: '🌿',
+        blocks: [
+          {
+            name: 'Bloque 1 – Preventivos', time: '7\'',
+            exercises: [
+              { name: 'Tibial anterior', sets: '2×12', url: 'https://youtube.com/shorts/PPf1Z5Yf5AU' },
+              { name: 'Glúteo medio minibanda', sets: '2×12', url: 'https://youtube.com/shorts/tiCv8UXH1BU' },
+              { name: 'Gemelo bilateral rápido-controlado', sets: '2×12', url: 'https://youtube.com/shorts/QEUZrRbX66E' },
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  // ──── FUERZA POTENCIA 1 ────
+  {
+    id: 'fp1', type: 'pot', typeName: 'Fuerza Potencia',
+    name: 'Fuerza Potencia 1', num: '1',
+    date: '02-06-2026', totalMin: 47,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '19\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            exercises: [
+              { name: 'Skipping lateral entre conos', sets: '3×15\'\'', note: 'Puedo hacerlo entre algún elemento X', url: 'https://youtube.com/shorts/5JgCg7RMxSM' },
+              { name: 'Cuerda cruzada o salto alternado', sets: '3×20\'\'', url: 'https://youtube.com/shorts/k4JzTg4Rbzs' },
+              { name: 'Lateral Step quick feet en cajón bajo', sets: '2×20\'\'', url: 'https://youtube.com/shorts/aEgOdf_cE1Y' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '7\'',
+            exercises: [
+              { name: 'Hip airplane asistido', sets: '2×4/lado', url: 'https://youtube.com/shorts/U5f8h7FDEa0' },
+              { name: 'Balancita de Tobillos', sets: '2×8/lado', url: 'https://youtube.com/shorts/knmjRIEThDs' },
+              { name: 'Thread the needle torácico', sets: '2×6/lado', url: 'https://youtube.com/shorts/cqiNNM3oFnw' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Core', time: '5\'',
+            exercises: [
+              { name: 'Bear plank shoulder taps', sets: '2×10/lado', url: 'https://youtube.com/shorts/IzJhfrGQsjY' },
+              { name: 'Half-kneeling cable hold', sets: '2×15\'\'/lado', note: 'Gym: con peso. Casa: con bandas', url: 'https://youtube.com/shorts/omJQoqYJMbo' },
+              { name: 'Marching bridge', sets: '2×8/lado', url: 'https://youtube.com/shorts/ORO64L7Iz4w' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '21\'', icon: '⚡',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '6\'',
+            exercises: [
+              { name: 'Bound corto en el lugar + stick', sets: '3×4/lado', note: 'Salto hacia arriba y caigo cerquita de donde arranco', url: 'https://youtube.com/shorts/TGRWfpG6W6c' },
+              { name: 'Step-up con rebote reactivo', sets: '3×4/pierna', url: 'https://youtube.com/shorts/M5Zvvw4zNfw' },
+              { name: 'Salto horizontal a 1 pie + 2 pies frenado', sets: '3×4', url: 'https://youtube.com/shorts/sb6dmTe8W0s' },
+            ],
+            pause: '20-30s entre ejercicios · 60s al final de la ronda'
+          },
+          {
+            name: 'Bloque 2', time: '8\'',
+            exercises: [
+              { name: 'Landmine squat to press', sets: '3×6 carga media, ejecución rápida RIR 2-3', url: 'https://youtube.com/watch?v=G9RpZXJcg10' },
+              { name: 'Remo renegado apoyado en banco o con base estable', sets: '3×8/lado', url: 'https://youtube.com/shorts/4vMbtVX59fA' },
+            ],
+            pause: '60-75 s al final del bloque'
+          },
+          {
+            name: 'Bloque 3 – Abdominales', time: '7\'',
+            exercises: [
+              { name: 'Lateral step-up con rodilla arriba', sets: '3×6/lado', note: 'LA RODILLA QUE NO ME SUBE SIEMPRE ARRIBA', url: 'https://youtube.com/shorts/RbpOetIGUwk' },
+              { name: 'Pulldown un brazo medio arrodillado', sets: '3×8/lado', url: 'https://youtube.com/shorts/kXFQT497I3w' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Vuelta a la calma', time: '7\'', icon: '🌿',
+        blocks: [
+          {
+            name: 'Bloque 1 – Preventivos', time: '7\'',
+            exercises: [
+              { name: 'Toe walks', sets: '2×15m', note: 'Caminata de Talones', url: 'https://youtube.com/watch?v=aZ15aYKjx58' },
+              { name: 'Tibial posterior con pelota entre talones', sets: '2×12', url: 'https://youtube.com/shorts/hNwUKDeBrCE' },
+              { name: 'Psoas isométrico en pared', sets: '2×20\'\'/pierna', url: 'https://youtube.com/shorts/XLqrmuTH9SQ' },
+              { name: 'Monster walk diagonal', sets: '2×10 pasos', url: 'https://youtube.com/watch?v=otrZdtPqJek' },
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  // ──── FUERZA POTENCIA 2 ────
+  {
+    id: 'fp2', type: 'pot', typeName: 'Fuerza Potencia',
+    name: 'Fuerza Potencia 2', num: '2',
+    date: '04-06-2026', totalMin: 47,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '19\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            exercises: [
+              { name: 'Battle rope alternado + Pequeño Salto', sets: '3×20\'\'', note: 'Pueden sacudir la sábana de la casa – No es chiste', url: 'https://youtube.com/shorts/rj3Wr6QqVxo' },
+              { name: 'Lateral shuffle con frenado', sets: '2×10m ida y vuelta', url: 'https://youtube.com/shorts/O9zzo7oiyK4' },
+              { name: 'Jump rope boxer step', sets: '2×20\'\'', url: 'https://youtube.com/results?search_query=Jump+rope+boxer+step' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '7\'',
+            exercises: [
+              { name: 'World\'s greatest stretch con rotación', sets: '2×4/lado', url: 'https://youtube.com/shorts/kSPS_HIQv8E' },
+              { name: 'Hip hinge wall tap drill', sets: '2×8', url: 'https://youtube.com/shorts/XQYjpzrLDbE' },
+              { name: 'Adductor rock back con reach', sets: '2×6/lado', url: 'https://youtube.com/shorts/oRDcR1JGGYI' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Core', time: '5\'',
+            exercises: [
+              { name: 'Body saw en fitball o sliders', sets: '2×8', url: 'https://youtube.com/watch?v=U6zUaObgROo' },
+              { name: 'Suitcase carry marchado', sets: '2×20m/lado', url: 'https://youtube.com/shorts/-n8CxwQwB-4' },
+              { name: 'Tall kneeling anti-extension press', sets: '2×8', note: 'Con Polea y con Banda', url: 'https://youtube.com/watch?v=TNkpm5KAGKI' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '21\'', icon: '⚡',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '6\'',
+            exercises: [
+              { name: 'Med ball scoop toss', sets: '3×5/lado', url: 'https://youtube.com/shorts/HLwSkCBM_xY' },
+              { name: 'Kettlebell swing alternado a mano', sets: '3×6/lado', url: 'https://youtube.com/shorts/8UHn_KNfvr4' },
+              { name: 'Skater bound lateral', sets: '3×4/lado', url: 'https://youtube.com/shorts/lyMLKJX4MRU' },
+            ],
+            pause: '45-60 s'
+          },
+          {
+            name: 'Bloque 2', time: '8\'',
+            exercises: [
+              { name: 'Trap bar jump shrug o KB deadlift high pull', sets: '3×5 carga baja-media, foco velocidad', url: 'https://youtube.com/shorts/FIZh3CshfZQ' },
+              { name: 'Press en split stance con mancuerna', sets: '3×8/lado', url: 'https://youtube.com/shorts/SXPpCD60gow' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Abdominales', time: '7\'',
+            exercises: [
+              { name: 'Single-leg RDL con remo', sets: '3×6/lado', url: 'https://youtube.com/shorts/t3jiMq2LrUA' },
+              { name: 'Push-up con apoyo alterno en cajón bajo', sets: '3×8', url: 'https://youtube.com/shorts/6Wu8wC022kY' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Vuelta a la calma', time: '7\'', icon: '🌿',
+        blocks: [
+          {
+            name: 'Bloque 1 – Preventivos', time: '7\'',
+            exercises: [
+              { name: 'Soleus raise con rodilla flexionada', sets: '2×15', url: 'https://youtube.com/shorts/ml6a5ElN9wY' },
+              { name: 'Copenhagen plank corto dinámico', sets: '2×6/lado', url: 'https://youtube.com/results?search_query=Copenhagen+plank+corto+dinámico' },
+              { name: 'Glúteo medio en pared empujando rodilla', sets: '2×20\'\'', url: 'https://youtube.com/watch?v=Q-zGnMd9Pyw' },
+              { name: 'Psoas march con minibanda cruzada', sets: '2×8', url: 'https://youtube.com/shorts/87WwFpe_-hI' },
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  // ──── FUERZA POTENCIA 3 ────
+  {
+    id: 'fp3', type: 'pot', typeName: 'Fuerza Potencia',
+    name: 'Fuerza Potencia 3', num: '3',
+    date: '05-06-2026', totalMin: 47,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '19\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            exercises: [
+              { name: 'Shadow boxing + desplazamiento circular', sets: '3×20\'\'', note: 'METANLE VELOCIDAD CULIAU', url: 'https://youtube.com/shorts/njIBEALf9KI' },
+              { name: 'Fast feet sobre líneas', sets: '2×15\'\'', url: 'https://youtube.com/shorts/znV7luMpzCQ' },
+              { name: 'Marcha de psoas con cambio de ritmo', sets: '2×8/lado', url: 'https://youtube.com/shorts/50TIy1oFjhQ' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '7\'',
+            exercises: [
+              { name: 'Cadera 90/90 con elevación', sets: '1×5/lado', url: 'https://youtube.com/shorts/4joPKKnByn0' },
+              { name: 'Tobillo en split stance con reach', sets: '1×8/lado', url: 'https://youtube.com/watch?v=Ks3zWbHMX8E' },
+              { name: 'Rotación torácica desde lunge', sets: '1×6/lado', url: 'https://youtube.com/shorts/hesyBQTaMz0' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Core', time: '5\'',
+            exercises: [
+              { name: 'Bear crawl hold', sets: '2×20\'\'', url: 'https://youtube.com/shorts/s1EfzunCL8A' },
+              { name: 'Pallof press overhead', sets: '2×8/lado', url: 'https://youtube.com/shorts/J_ui-MC9Dyg' },
+              { name: 'Side plank reach through', sets: '2×6/lado', url: 'https://youtube.com/watch?v=-ruAdV34H54' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '14\'', icon: '⚡',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '6\'',
+            exercises: [
+              { name: 'Line hops adelante-atrás', sets: '2×12', url: 'https://youtube.com/shorts/MMXLE-bveAI' },
+              { name: 'Line hops lateral-lateral', sets: '2×12', url: 'https://youtube.com/shorts/FqbcTmDy6Ps' },
+              { name: 'Snap down to split stance', sets: '2×4/lado', url: 'https://youtube.com/shorts/1nLybuL1jGk' },
+            ],
+            pause: '20-30 s'
+          },
+          {
+            name: 'Bloque 2', time: '8\'',
+            exercises: [
+              { name: 'Front foot elevated split squat liviano', sets: '2×8/lado', url: 'https://youtube.com/shorts/EU6AjXmI0yM' },
+              { name: 'TRX power row', sets: '2×8', url: 'https://youtube.com/shorts/Cpn2P7vn2vs' },
+              { name: 'Landmine push press liviano', sets: '2×6/lado', url: 'https://youtube.com/watch?v=Rc23TMvgY34' },
+            ]
+          },
+        ]
+      },
+    ]
+  },
+];
+
+const typeColors = {
+  hiper: '#9B59B6',
+  desc:  '#3498DB',
+  max:   '#E85D2F',
+  pot:   '#F39C12',
+};
+
+const typeIcons = {
+  hiper: '🏋️',
+  desc:  '🏃',
+  max:   '🔴',
+  pot:   '⚡',
+};
+
+const WEEKS = [
+  { key: 'max',   num: 1, label: 'Semana 1',  focus: 'Fuerza Máxima',       color: '#E85D2F', icon: '🔴' },
+  { key: 'pot',   num: 2, label: 'Semana 2',  focus: 'Fuerza Potencia',     color: '#F39C12', icon: '⚡' },
+  { key: 'hiper', num: 3, label: 'Semana 3',  focus: 'Hipertrofia Funcional',color: '#9B59B6', icon: '🏋️' },
+  { key: 'desc',  num: 4, label: 'Semana 4',  focus: 'Resistencia',         color: '#3498DB', icon: '🏃' },
+];
+
+let currentFilter = 'all';
+let currentWorkout = null;
+let currentPhaseIdx = 0;
+
+function renderHome() {
+  const list = document.getElementById('sessions-list');
+  list.innerHTML = '';
+
+  const weeksToShow = currentFilter === 'all'
+    ? WEEKS
+    : WEEKS.filter(w => w.key === currentFilter);
+
+  weeksToShow.forEach(week => {
+    const workouts = WORKOUTS.filter(w => w.type === week.key);
+    if (!workouts.length) return;
+
+    // Week header block
+    const weekHeader = document.createElement('div');
+    weekHeader.className = 'week-header fade-in';
+    weekHeader.style.cssText = `
+      margin: 24px 0 14px;
+      padding: 16px 18px;
+      background: var(--surface);
+      border-radius: 16px;
+      border-left: 4px solid ${week.color};
+      display: flex; align-items: center; gap: 14px;
+    `;
+    weekHeader.innerHTML = `
+      <div style="width:44px;height:44px;border-radius:12px;background:${week.color}22;
+        display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">
+        ${week.icon}
+      </div>
+      <div>
+        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
+          color:${week.color};font-weight:600;margin-bottom:2px;">${week.label}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;
+          color:var(--text);line-height:1;">${week.focus}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">
+          ${workouts.length} sesión${workouts.length !== 1 ? 'es' : ''} · 3 días/semana
+        </div>
+      </div>
+    `;
+    list.appendChild(weekHeader);
+
+    workouts.forEach((w, idx) => {
+      const card = document.createElement('div');
+      card.className = `session-card type-${w.type} fade-in`;
+      card.style.animationDelay = `${idx * 0.05}s`;
+      card.onclick = () => openWorkout(w.id);
+
+      const totalBlocks = w.phases.reduce((a, p) => a + p.blocks.length, 0);
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div>
+            <div class="card-type" style="color:${week.color}">
+              Día ${idx + 1}
+            </div>
+            <div class="card-name">${w.name}</div>
+          </div>
+          <div class="card-badge">
+            <div class="badge-num">${w.totalMin}'</div>
+            <div class="badge-label">min</div>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="meta-item"><div class="meta-dot" style="background:${week.color}"></div>${w.phases.length} fases</div>
+          <div class="meta-item"><div class="meta-dot" style="background:${week.color}"></div>${totalBlocks} bloques</div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  });
+}
+
+function filterWeek(type) {
+  currentFilter = type;
+  document.querySelectorAll('.week-pill').forEach((p, i) => {
+    const types = ['all','max','pot','hiper','desc'];
+    p.classList.toggle('active', types[i] === type);
+  });
+  renderHome();
+}
+
+function openWorkout(id) {
+  currentWorkout = WORKOUTS.find(w => w.id === id);
+  currentPhaseIdx = 0;
+  renderDetail();
+  document.getElementById('screen-home').classList.remove('active');
+  document.getElementById('screen-detail').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goHome() {
+  document.getElementById('screen-detail').classList.remove('active');
+  document.getElementById('screen-home').classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+// TIMER STATE
+// ══════════════════════════════════════════════
+const timers = {}; // key: `${workoutId}-${phaseIdx}-${blockIdx}`
+
+function timerKey(bi) {
+  return `${currentWorkout.id}-${currentPhaseIdx}-${bi}`;
+}
+
+function getTimer(bi) {
+  const k = timerKey(bi);
+  if (!timers[k]) {
+    const phase = currentWorkout.phases[currentPhaseIdx];
+    const block = phase.blocks[bi];
+    const mins = parseInt(block.time) || 5;
+    timers[k] = { total: mins * 60, remaining: mins * 60, running: false, interval: null };
+  }
+  return timers[k];
+}
+
+function fmtTime(sec) {
+  const m = Math.floor(sec / 60).toString().padStart(2,'0');
+  const s = (sec % 60).toString().padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+function updateTimerUI(bi) {
+  const t = getTimer(bi);
+  const disp = document.getElementById(`timer-disp-${bi}`);
+  const ring = document.getElementById(`ring-fill-${bi}`);
+  const btnPlay = document.getElementById(`btn-play-${bi}`);
+  const floating = document.getElementById('floating-timer');
+
+  if (!disp) return;
+
+  disp.textContent = fmtTime(t.remaining);
+
+  // color states
+  const pct = t.remaining / t.total;
+  disp.className = 'timer-display' + (t.running ? ' running' : '') + (pct <= 0.25 && t.remaining > 0 ? ' warning' : '') + (t.remaining === 0 ? ' done' : '');
+
+  // ring
+  const r = 18, circ = 2 * Math.PI * r;
+  const progress = t.remaining / t.total;
+  ring.style.strokeDasharray = circ;
+  ring.style.strokeDashoffset = circ * (1 - progress);
+  ring.style.stroke = t.remaining === 0 ? 'var(--green)' : pct <= 0.25 ? '#F39C12' : 'var(--orange)';
+
+  // play/pause icon
+  btnPlay.textContent = t.running ? '⏸' : '▶';
+  btnPlay.className = `timer-btn ${t.running ? 'btn-pause' : 'btn-play'}`;
+
+  // floating pill — show if any timer running
+  const anyRunning = Object.values(timers).find(t => t.running);
+  if (anyRunning) {
+    floating.textContent = fmtTime(anyRunning.remaining);
+    floating.classList.add('visible');
+  } else {
+    floating.classList.remove('visible');
+  }
+}
+
+function toggleTimer(bi) {
+  const t = getTimer(bi);
+  if (t.remaining === 0) return;
+
+  if (t.running) {
+    clearInterval(t.interval);
+    t.running = false;
+    updateTimerUI(bi);
+  } else {
+    // pause all others
+    Object.entries(timers).forEach(([k, ot]) => {
+      if (ot.running) {
+        clearInterval(ot.interval);
+        ot.running = false;
+        const otBi = parseInt(k.split('-')[2]);
+        updateTimerUI(otBi);
+      }
+    });
+
+    t.running = true;
+    t.interval = setInterval(() => {
+      t.remaining--;
+      updateTimerUI(bi);
+      if (t.remaining <= 0) {
+        clearInterval(t.interval);
+        t.running = false;
+        t.remaining = 0;
+        updateTimerUI(bi);
+        // vibrate if supported
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      }
+    }, 1000);
+    updateTimerUI(bi);
+  }
+}
+
+function resetTimer(bi) {
+  const t = getTimer(bi);
+  clearInterval(t.interval);
+  t.running = false;
+  t.remaining = t.total;
+  updateTimerUI(bi);
+}
+
+// ══════════════════════════════════════════════
+// WEIGHT NOTES STATE  (persisted in localStorage)
+// ══════════════════════════════════════════════
+function weightKey(exName) {
+  return 'w_' + exName.replace(/\s+/g,'_').toLowerCase().slice(0,40);
+}
+
+function getWeightHistory(exName) {
+  try { return JSON.parse(localStorage.getItem(weightKey(exName))) || []; }
+  catch { return []; }
+}
+
+function saveWeight(exName, value) {
+  if (!value.trim()) return;
+  const hist = getWeightHistory(exName);
+  const today = new Date().toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'2-digit' });
+  hist.unshift({ date: today, val: value.trim() });
+  // keep last 10
+  if (hist.length > 10) hist.pop();
+  localStorage.setItem(weightKey(exName), JSON.stringify(hist));
+}
+
+function deleteWeight(exName, idx) {
+  const hist = getWeightHistory(exName);
+  hist.splice(idx, 1);
+  localStorage.setItem(weightKey(exName), JSON.stringify(hist));
+  openWeightModal(exName); // re-render
+}
+
+function getLastWeight(exName) {
+  const h = getWeightHistory(exName);
+  return h.length ? h[0].val : null;
+}
+
+function openWeightModal(exName) {
+  const hist = getWeightHistory(exName);
+  document.getElementById('modal-ex-name').textContent = exName;
+  document.getElementById('modal-ex-sub').textContent = `${hist.length} registro${hist.length !== 1 ? 's' : ''} guardado${hist.length !== 1 ? 's' : ''}`;
+
+  const listEl = document.getElementById('modal-history-list');
+  if (!hist.length) {
+    listEl.innerHTML = `<div class="history-empty">Sin registros aún — guardá tu primera carga arriba.</div>`;
+  } else {
+    listEl.innerHTML = hist.map((h, i) => `
+      <div class="history-entry">
+        <div>
+          <div class="history-val">${h.val}</div>
+          <div class="history-date">${h.date}</div>
+        </div>
+        <div class="history-del" onclick="deleteWeight('${exName.replace(/'/g,"\\'")}', ${i})">🗑</div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('weight-modal').classList.add('open');
+  window._currentModalEx = exName;
+}
+
+function closeWeightModal(e) {
+  if (e && e.target !== document.getElementById('weight-modal')) return;
+  document.getElementById('weight-modal').classList.remove('open');
+}
+
+function handleWeightSave(exName, inputId, savedId) {
+  const input = document.getElementById(inputId);
+  const savedTag = document.getElementById(savedId);
+  if (!input.value.trim()) return;
+  saveWeight(exName, input.value.trim());
+  savedTag.classList.add('visible');
+  setTimeout(() => savedTag.classList.remove('visible'), 2000);
+}
+
+// ══════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════
+function renderDetail() {
+  const w = currentWorkout;
+  const header = document.getElementById('detail-header');
+  const content = document.getElementById('detail-content');
+
+  header.className = `detail-header detail-${w.type}`;
+
+  const tabs = w.phases.map((p, i) => `
+    <div class="phase-tab ${i === currentPhaseIdx ? 'active' : ''}" onclick="switchPhase(${i})">
+      <span>${p.icon}</span>
+      <span class="tab-time">${p.time}</span>
+      <span>${p.name}</span>
+    </div>
+  `).join('');
+
+  header.innerHTML = `
+    <div class="back-btn" onclick="goHome()">
+      <div class="back-arrow">←</div>
+      Volver
+    </div>
+    <div class="detail-type">${typeIcons[w.type]} ${w.typeName} · ${w.date}</div>
+    <div class="detail-title">${w.name}</div>
+    <div class="phase-tabs">${tabs}</div>
+  `;
+
+  const phase = w.phases[currentPhaseIdx];
+  let html = '';
+
+  phase.blocks.forEach((block, bi) => {
+    const t = getTimer(bi);
+    const r = 18, circ = 2 * Math.PI * r;
+    const progress = t.remaining / t.total;
+    const offset = circ * (1 - progress);
+
+    html += `<div class="block-section fade-in">`;
+
+    // Block timer row
+    html += `
+      <div class="block-timer-row">
+        <div class="timer-progress-ring">
+          <svg width="44" height="44" viewBox="0 0 44 44">
+            <circle class="ring-bg" cx="22" cy="22" r="${r}"/>
+            <circle class="ring-fill" id="ring-fill-${bi}" cx="22" cy="22" r="${r}"
+              stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px">${block.name}</div>
+          <div class="timer-display ${t.running ? 'running' : ''}" id="timer-disp-${bi}">${fmtTime(t.remaining)}</div>
+        </div>
+        <div class="timer-btns">
+          <button class="timer-btn btn-reset" id="btn-reset-${bi}" onclick="resetTimer(${bi})">↺</button>
+          <button class="timer-btn ${t.running ? 'btn-pause' : 'btn-play'}" id="btn-play-${bi}" onclick="toggleTimer(${bi})">${t.running ? '⏸' : '▶'}</button>
+        </div>
+      </div>
+    `;
+
+    if (block.note) {
+      html += `<div class="exercise-note" style="margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;">📌 ${block.note}</div>`;
+    }
+
+    html += `<div class="exercises-list">`;
+    block.exercises.forEach((ex, ei) => {
+      const inputId = `wi-${bi}-${ei}`;
+      const savedId = `ws-${bi}-${ei}`;
+      const lastW = getLastWeight(ex.name);
+      const exNameSafe = ex.name.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+
+      html += `<div class="exercise-item">
+        <div class="exercise-top">
+          <div class="exercise-name">${ex.name}</div>
+          ${ex.sets ? `<div class="exercise-sets">${ex.sets}</div>` : ''}
+        </div>
+        ${ex.note ? `<div class="exercise-note">💬 ${ex.note}</div>` : ''}
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px;">
+          ${ex.url ? `<a class="video-btn" href="${ex.url}" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Ver video
+          </a>` : ''}
+          ${lastW ? `<span style="font-size:11px;color:var(--text-muted);cursor:pointer;" onclick="openWeightModal('${exNameSafe}')">🏋️ ${lastW}</span>` : ''}
+        </div>
+        <div class="weight-row">
+          <div class="weight-input-wrap">
+            <span class="weight-icon">🏋️</span>
+            <input class="weight-input" id="${inputId}" type="text"
+              placeholder="${lastW ? 'Ej: ' + lastW : 'Ej: 20kg · 2 series'}"
+              onkeydown="if(event.key==='Enter'){handleWeightSave('${exNameSafe}','${inputId}','${savedId}');this.blur();}"/>
+          </div>
+          <button class="weight-save-btn" onclick="handleWeightSave('${exNameSafe}','${inputId}','${savedId}')">Guardar</button>
+          <div class="weight-saved-tag" id="${savedId}">✓ Guardado</div>
+        </div>
+        ${lastW ? `<div style="font-size:11px;color:var(--text-dim);margin-top:4px;cursor:pointer;" onclick="openWeightModal('${exNameSafe}')">Ver historial →</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+
+    if (block.pause) {
+      html += `<div class="pause-note">⏸ <strong>Pausa:</strong> ${block.pause}</div>`;
+    }
+
+    if (bi < phase.blocks.length - 1) {
+      html += `<div class="section-divider"></div>`;
+    }
+    html += `</div>`;
+  });
+
+  content.innerHTML = html;
+  content.scrollTop = 0;
+
+  // Init ring visuals
+  phase.blocks.forEach((_, bi) => updateTimerUI(bi));
+}
+
+function switchPhase(idx) {
+  // stop any running timers for current phase
+  const phase = currentWorkout.phases[currentPhaseIdx];
+  phase.blocks.forEach((_, bi) => {
+    const t = getTimer(bi);
+    if (t.running) { clearInterval(t.interval); t.running = false; }
+  });
+  currentPhaseIdx = idx;
+  renderDetail();
+}
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('SW registered'))
+      .catch(err => console.log('SW error:', err));
+  });
+}
+
+// Init
+renderHome();
+</script>
+</body>
+</html>
