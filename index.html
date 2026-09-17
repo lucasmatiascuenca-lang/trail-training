@@ -691,6 +691,7 @@
     <div class="week-pill" onclick="filterWeek('pot')">Sem 2 · Potencia</div>
     <div class="week-pill" onclick="filterWeek('hiper')">Sem 3 · Hipertrofia</div>
     <div class="week-pill" onclick="filterWeek('desc')">Sem 4 · Resistencia</div>
+    <div class="week-pill" onclick="filterWeek('actual')">⛰️ Sesiones ET</div>
   </div>
 
   <div class="sessions-list" id="sessions-list"></div>
@@ -1611,6 +1612,224 @@ const WORKOUTS = [
       },
     ]
   },
+
+  // ──── SESIONES ET (entrenamiento actual del profe) ────
+  {
+    id: 'et1', type: 'actual', typeName: 'Entrenamientos ET',
+    name: 'Fuerza de Subida', num: '1',
+    date: '15-09-2026', totalMin: 48,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '24\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '8\'',
+            note: 'Dos vueltas continuas',
+            exercises: [
+              { name: 'Movilidad de tobillo en zancada con alcance hacia delante', sets: '8/lado', url: 'https://youtube.com/shorts/DXMorMJvZuw' },
+              { name: 'Transición 90/90 a posición de media rodilla', sets: '5/lado', url: 'https://youtube.com/shorts/d3rwq09hWQg' },
+              { name: 'Sentadilla cosaca con apoyo', sets: '5/lado', url: 'https://youtube.com/shorts/yrAG1a7F9RM' },
+              { name: 'Rotación torácica desde zancada baja', sets: '6/lado', url: 'https://youtube.com/shorts/TpNnwYX8vmo' },
+              { name: 'Círculos controlados de cadera de pie', sets: '4/lado', url: 'https://youtube.com/watch?v=m-CPNH3gBhw' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '8\'',
+            exercises: [
+              { name: 'Tirón alto desde posición colgante', sets: '3×3 30–40% RM', url: 'https://youtube.com/shorts/gwyQtiI95DY' },
+            ],
+            pause: '75–90 s'
+          },
+          {
+            name: 'Bloque 3', time: '8\'',
+            exercises: [
+              { name: 'Subida alta al cajón con carga contralateral', sets: '4×5/lado 65–72% RIR 2', url: 'https://youtube.com/shorts/4dbezr7bF1Q' },
+              { name: 'Remo unilateral en posición de zancada', sets: '3×6/lado 70–75% RIR 2', note: 'Alternativa: youtube.com/shorts/PVpKgX5Xmic', url: 'https://youtube.com/shorts/0qHLZC3BeVA' },
+              { name: 'Sentadilla dividida con pie delantero elevado', sets: '3×5/lado 72–78% RIR 2', note: 'Con barra, mancuernas o kb. El profe la quiere ver ensayada antes del día de series', url: 'https://youtube.com/shorts/ZVHuISvsWOQ' },
+              { name: 'Marcha potente de montaña', sets: '20"', url: 'https://youtube.com/shorts/PwWdumbsJKg' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '24\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '7\'',
+            note: 'Tres vueltas',
+            exercises: [
+              { name: 'Paseo con carga unilateral en posición frontal', sets: '15–20 m/lado', url: 'https://youtube.com/shorts/a6krVEjNBxQ' },
+              { name: 'Presión anti-rotatoria con estocadas', sets: '6/lado', url: 'https://youtube.com/shorts/15UbJhwVU0c' },
+              { name: 'Bisagra a una pierna con alcance cruzado', sets: '5/lado', url: 'https://youtube.com/shorts/1Wz2LcwyJno' },
+              { name: 'Plancha lateral corta con rodilla superior al pecho', sets: '6/lado', url: 'https://youtube.com/shorts/ljRv0PJqQ20' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '10\'',
+            note: 'Dos vueltas',
+            exercises: [
+              { name: 'Elevación de sóleo sentado a una pierna', sets: '10/lado', url: 'https://youtube.com/shorts/-Flm8tw0gPE' },
+              { name: 'Eversión de tobillo con banda', sets: '12/lado', url: 'https://youtube.com/watch?v=gYfkLe2rKv8' },
+              { name: 'Empuje lateral de rodilla contra pared', sets: '20"/lado', url: 'https://youtube.com/shorts/oYXqW6TGr5E' },
+              { name: 'Flexión de cadera sentado con banda', sets: '10/lado', url: 'https://youtube.com/shorts/vIIiDenzOQc' },
+              { name: 'Arco corto del pie', sets: '8/lado', url: 'https://youtube.com/shorts/XMEWBehKlYA' },
+            ]
+          },
+          {
+            name: 'Bloque 3', time: '7\'',
+            note: 'Captura cortada, puede faltar contenido de este bloque',
+            exercises: [
+              { name: 'HIIT', sets: '5×10" fuerte / 50" suave', url: null },
+            ]
+          },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'et2', type: 'actual', typeName: 'Entrenamientos ET',
+    name: 'Bajada + Potencia + Reaceleración', num: '2',
+    date: '17-09-2026', totalMin: 49,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '21\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '8\'',
+            note: 'Dos vueltas',
+            exercises: [
+              { name: 'Movilidad de aductores en posición de rana', sets: '6', url: 'https://youtube.com/shorts/lru8IJXlTG0' },
+              { name: 'Rotación de cadera 90/90 con inclinación', sets: '5/lado', url: 'https://youtube.com/shorts/p731gZyBw9k' },
+              { name: 'Movilidad de sóleo contra pared', sets: '8/lado', url: 'https://youtube.com/shorts/tbgaFZJbtnY' },
+              { name: 'Rotación torácica con banda', sets: '6/lado', url: 'https://youtube.com/watch?v=hkgUJBpXNS0' },
+              { name: 'Apertura escapular en cuadrupedia', sets: '8', url: 'https://youtube.com/shorts/f0BFgnZrNfQ' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '8\'',
+            note: '3 rondas',
+            exercises: [
+              { name: 'Salto lateral corto con estabilización arriba de un disco, banco, step o sillita', sets: '×3/lado', url: 'https://youtube.com/shorts/iWaHlNNqz9c' },
+              { name: 'Salto horizontal corto + frenado', sets: '×3', url: 'https://youtube.com/shorts/BzOPIDpW-kA' },
+              { name: 'Carrera de tres pasos + frenado', sets: '×3/lado', note: 'El tercer ejercicio', url: 'https://youtube.com/shorts/qeSX3405hTk' },
+            ]
+          },
+          {
+            name: 'Bloque 3', time: '5\'',
+            exercises: [
+              { name: 'Arranque con mancuerna desde posición colgante', sets: '3×3/lado 30–40% RM', url: 'https://youtube.com/shorts/2aSB3-XLAlY' },
+            ],
+            pause: '75 s'
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '28\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '10\'',
+            exercises: [
+              { name: 'Paso descendente desde cajón', sets: '3×6/lado peso corporal o carga ligera', note: 'Descenso de 3 s, pausa de 1" antes de tocar el piso', url: 'https://youtube.com/shorts/WOaWKWYFVR4' },
+              { name: 'Peso muerto rumano a una pierna con apoyo', sets: '3×6/lado 65–72% RIR 2–3', url: 'https://youtube.com/shorts/WY8vQ3nIz7A' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '5\'',
+            exercises: [
+              { name: 'Zancada atrás con carga', sets: '3×5/lado 65–72% RIR 2', url: null },
+              { name: 'Carrera rápida controlada o pies rápidos', sets: '3 rondas de 15"', note: 'Quiero 3 rondas de los trabajos que muestra nuestro jugador de fútbol', url: 'https://youtube.com/shorts/j10p2LSadTE' },
+            ]
+          },
+          {
+            name: 'Bloque 3 – Abdominales', time: '5\'',
+            note: 'Dos–tres vueltas',
+            exercises: [
+              { name: 'Paseo del camarero', sets: '15 m/lado', url: 'https://youtube.com/shorts/yqm072HqCc8' },
+              { name: 'Arrastre de disco o mochila desde plancha alta', sets: '6/lado', url: 'https://youtube.com/watch?v=8e-UsprcF8U' },
+              { name: 'Paso descendente con alcance cruzado sin carga', sets: '5/lado', url: 'https://youtube.com/shorts/OxUzbavy7oA' },
+              { name: 'Marcha con carga asimétrica', sets: '8/lado', url: 'https://youtube.com/shorts/V4tPKZc7oH8' },
+            ]
+          },
+          {
+            name: 'Bloque 4', time: '8\'',
+            exercises: [
+              { name: 'Tibial anterior con banda', sets: '2×15', url: 'https://youtube.com/watch?v=m-7L4mVgt0w' },
+              { name: 'Inversión de tobillo con banda', sets: '2×12/lado', url: 'https://youtube.com/watch?v=-KjDoJDa8Qg' },
+              { name: 'Sentadilla española isométrica', sets: '2×25"', url: 'https://youtube.com/shorts/fHXjl7t3Mws' },
+              { name: 'Plancha corta de aductores', sets: '2×15"/lado', url: 'https://youtube.com/shorts/sBB1tMDDCns' },
+              { name: 'Rotación externa de hombro con banda', sets: '2×12/lado', url: 'https://youtube.com/shorts/06ElhdWiexs' },
+            ]
+          },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'et3', type: 'actual', typeName: 'Entrenamientos ET',
+    name: 'Velocidad + Estabilidad + Protección Articular', num: '3',
+    date: '18-09-2026', totalMin: 35,
+    phases: [
+      {
+        name: 'Entrada en calor', time: '21\'', icon: '🔥',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '8\'',
+            note: 'Una–dos vueltas',
+            exercises: [
+              { name: 'Movilidad de tobillo sobre escalón', sets: '8/lado', url: 'https://youtube.com/shorts/8ndDBCg1tVk' },
+              { name: 'Rotación de cadera de pie', sets: '5/lado', url: 'https://youtube.com/shorts/wNM3jjVHOQ0' },
+              { name: 'Transición 90/90', sets: '5/lado', url: 'https://youtube.com/shorts/z4KZorlrAG4' },
+              { name: 'Sentadilla profunda con rotación torácica', sets: '5/lado', url: 'https://youtube.com/shorts/Xaen1Yk5wvM' },
+              { name: 'Movilidad escapular con banda', sets: '10', url: 'https://youtube.com/watch?v=L2uFJcLmeZw' },
+            ]
+          },
+          {
+            name: 'Bloque 2', time: '8\'',
+            note: '12 minutos en 4 estaciones de 1 minuto cada una, repetidas tres vueltas',
+            exercises: [
+              { name: 'Cargada con mancuerna a una mano', sets: '3/lado (minuto 1)', url: 'https://youtube.com/shorts/uvTHxL5-ZcU' },
+              { name: 'Subida cruzada al cajón', sets: '5/lado (minuto 2)', url: 'https://youtube.com/shorts/RMZYJXb5dog' },
+              { name: 'Remo rápido con banda', sets: '8 (minuto 3)', url: 'https://youtube.com/watch?v=cRmuo81YQes' },
+              { name: 'Marcha con carga unilateral', sets: '6/lado (minuto 4)', url: 'https://youtube.com/shorts/EzuvuEnaT1Y' },
+            ]
+          },
+          {
+            name: 'Bloque 3', time: '5\'',
+            note: 'Dos vueltas',
+            exercises: [
+              { name: 'A. Caminata del oso hacia atrás', sets: '6–8 m', url: 'https://youtube.com/shorts/SCL3FrPwbU0' },
+              { name: 'B. Press de banda desde posición de zancada', sets: '6/lado', url: 'https://youtube.com/watch?v=o2Mlr4KUFJU' },
+              { name: 'C. Puente lateral con aducción', sets: '5/lado', url: 'https://youtube.com/shorts/CIaPjt0zzg0' },
+              { name: 'D. Peso muerto a una pierna sin carga + rodilla arriba', sets: '5/lado', url: 'https://youtube.com/shorts/U0PJpzZeqDw' },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'Bloque Principal', time: '14\'', icon: '💪',
+        blocks: [
+          {
+            name: 'Bloque 1', time: '10\'',
+            note: 'Una sola vuelta de calidad',
+            exercises: [
+              { name: 'Arco corto del pie', sets: '×8/lado', url: 'https://youtube.com/shorts/3GXCqWzJWF8' },
+              { name: 'Elevación del tibial anterior a una pierna asistida', sets: '×10/lado', url: 'https://youtube.com/shorts/-pGwwrUWL4w' },
+              { name: 'Isometría de sóleo a una pierna', sets: '20"/lado', url: 'https://youtube.com/shorts/rUyDo07rUko' },
+              { name: 'Aducción de cadera de pie con banda', sets: '×10/lado', url: 'https://youtube.com/shorts/C1OKwhDF3mo' },
+              { name: 'Isometría de psoas en 90°', sets: '15"/lado', url: 'https://youtube.com/shorts/lhqch4w5xuE' },
+              { name: 'Rotación externa de hombro con banda', sets: '10/lado', url: 'https://youtube.com/shorts/06ElhdWiexs' },
+            ]
+          },
+          {
+            name: 'Bloque 2 – Abdominales', time: '4\'',
+            exercises: [
+              { name: 'Pies rápidos', sets: '3×10" / 50" muy suaves', url: null },
+            ]
+          },
+        ]
+      },
+    ]
+  },
 ];
 
 const typeColors = {
@@ -1618,6 +1837,7 @@ const typeColors = {
   desc:  '#3498DB',
   max:   '#E85D2F',
   pot:   '#F39C12',
+  actual:'#27AE60',
 };
 
 const typeIcons = {
@@ -1625,6 +1845,7 @@ const typeIcons = {
   desc:  '🏃',
   max:   '🔴',
   pot:   '⚡',
+  actual:'⛰️',
 };
 
 const WEEKS = [
@@ -1632,6 +1853,7 @@ const WEEKS = [
   { key: 'pot',   num: 2, label: 'Semana 2',  focus: 'Fuerza Potencia',     color: '#F39C12', icon: '⚡' },
   { key: 'hiper', num: 3, label: 'Semana 3',  focus: 'Hipertrofia Funcional',color: '#9B59B6', icon: '🏋️' },
   { key: 'desc',  num: 4, label: 'Semana 4',  focus: 'Resistencia',         color: '#3498DB', icon: '🏃' },
+  { key: 'actual',num: 5, label: 'Sesiones ET',focus: 'Entrenamiento Actual',color: '#27AE60', icon: '⛰️' },
 ];
 
 let currentFilter = 'all';
@@ -1712,7 +1934,7 @@ function renderHome() {
 function filterWeek(type) {
   currentFilter = type;
   document.querySelectorAll('.week-pill').forEach((p, i) => {
-    const types = ['all','max','pot','hiper','desc'];
+    const types = ['all','max','pot','hiper','desc','actual'];
     p.classList.toggle('active', types[i] === type);
   });
   renderHome();
