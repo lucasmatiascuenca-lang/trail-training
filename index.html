@@ -9,7 +9,7 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#E85D2F">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Trail Train">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
@@ -19,15 +19,15 @@
     --orange: #E85D2F;
     --orange-dark: #C44A20;
     --orange-light: #FF7A4D;
-    --bg: #0F0F0F;
-    --surface: #1A1A1A;
-    --surface2: #242424;
-    --surface3: #2E2E2E;
-    --text: #F0EDE8;
-    --text-muted: #888;
-    --text-dim: #555;
-    --green: #4CAF7D;
-    --blue: #5B9BD5;
+    --bg: #FAF8F5;
+    --surface: #FFFFFF;
+    --surface2: #F1EEE8;
+    --surface3: #E6E2D9;
+    --text: #201C18;
+    --text-muted: #6B6560;
+    --text-dim: #A39D94;
+    --green: #2F9E63;
+    --blue: #3B7FBF;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -49,7 +49,7 @@
 
   .home-header {
     padding: 48px 24px 24px;
-    background: linear-gradient(180deg, #1A0A05 0%, var(--bg) 100%);
+    background: linear-gradient(180deg, #FFE3D2 0%, var(--bg) 100%);
   }
 
   .home-eyebrow {
@@ -207,7 +207,7 @@
 
   .detail-header {
     padding: 48px 24px 20px;
-    background: linear-gradient(180deg, #1A0A05 0%, var(--bg) 80%);
+    background: linear-gradient(180deg, #FFE3D2 0%, var(--bg) 80%);
     position: sticky;
     top: 0;
     z-index: 10;
@@ -412,7 +412,7 @@
     position: fixed;
     bottom: 0;
     left: 0; right: 0;
-    background: rgba(15,15,15,0.95);
+    background: rgba(255,255,255,0.95);
     backdrop-filter: blur(12px);
     border-top: 1px solid var(--surface2);
     display: flex;
@@ -4291,7 +4291,7 @@ function renderDetail() {
     `;
 
     if (block.note) {
-      html += `<div class="exercise-note" style="margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;">📌 ${block.note}</div>`;
+      html += `<div class="exercise-note" style="margin-bottom:12px;padding:8px 12px;background:rgba(0,0,0,0.04);border-radius:8px;">📌 ${block.note}</div>`;
     }
 
     html += `<div class="exercises-list">`;
