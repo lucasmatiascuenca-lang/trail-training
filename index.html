@@ -1327,19 +1327,14 @@ function renderDetail() {
       const gifSlug = EXERCISE_GIF[ex.name];
 
       html += `<div class="exercise-item">
-        <div class="exercise-top" style="${gifSlug ? 'align-items:flex-start;gap:10px;' : ''}">
-          ${gifSlug ? `<img src="anim/${gifSlug}.gif" alt="Animación: ${ex.name}"
-            style="width:56px;height:56px;border-radius:10px;background:var(--surface2);flex-shrink:0;object-fit:cover;" />` : ''}
-          <div style="flex:1;">
-            <div class="exercise-top" style="padding:0;border:none;">
-              <div class="exercise-name">${ex.name}</div>
-              ${ex.sets ? `<div class="exercise-sets">${ex.sets}</div>` : ''}
-            </div>
-          </div>
+        ${gifSlug ? `<img src="anim/${gifSlug}.gif" alt="Animación: ${ex.name}"
+          style="width:100%;max-width:220px;display:block;margin:0 auto 10px;border-radius:14px;background:var(--surface2);object-fit:contain;" />` : ''}
+        <div class="exercise-top" style="padding:0;border:none;">
+          <div class="exercise-name">${ex.name}</div>
+          ${ex.sets ? `<div class="exercise-sets">${ex.sets}</div>` : ''}
         </div>
         ${ex.note ? `<div class="exercise-note">💬 ${ex.note}</div>` : ''}
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px;">
-          ${gifSlug ? `<span style="font-size:10px;color:var(--text-dim);">🎞️ animación offline</span>` : ''}
           ${ex.url ? `<a class="video-btn" href="${ex.url}" target="_blank">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             Ver video
