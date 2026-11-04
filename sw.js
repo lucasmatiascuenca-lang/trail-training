@@ -1,4 +1,4 @@
-const CACHE_NAME = 'trail-train-v1';
+const CACHE_NAME = 'trail-train-v2';
 const ASSETS = [
   '/',
   '/index.html',
@@ -29,7 +29,8 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: cache-first for app shell, network-first for YouTube links
+// Fetch: network-first for the app document (so updates land immediately),
+// cache-first for other static assets, network-first passthrough for YouTube.
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
@@ -38,22 +39,32 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-      return fetch(event.request).then(response => {
-        // Cache valid responses
+  // Document navigations / index.html: always try the network first so a
+  // new deploy shows up right away; fall back to cache only when offline.
+  if (event.request.destination === 'document' || url.pathname.endsWith('/index.html') || url.pathname === '/') {
+    event.respondWith(
+      fetch(event.request).then(response => {
         if (response && response.status === 200) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         }
         return response;
-      }).catch(() => {
-        // If offline and not cached, return index.html as fallback
-        if (event.request.destination === 'document') {
-          return caches.match('/index.html');
+      }).catch(() => caches.match(event.request).then(cached => cached || caches.match('/index.html')))
+    );
+    return;
+  }
+
+  // Other assets (manifest, fonts, icons): cache-first.
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+      return fetch(event.request).then(response => {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         }
-      });
+        return response;
+      }).catch(() => {});
     })
   );
 });
