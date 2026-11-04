@@ -732,6 +732,49 @@
 </div>
 
 <script>
+// Animated stick-figure illustration per exercise (offline, no YouTube needed).
+// Key = exact exercise name as it appears in WORKOUTS; value = anim/<slug>.gif
+const EXERCISE_GIF = {
+  'Rotación de cadera de pie': 'rotacion-cadera-pie',
+  'Movilidad de tobillo sobre escalón': 'movilidad-tobillo-escalon',
+  '90/90 dinámico': '90-90-dinamico',
+  'Jumping jacks bajos': 'jumping-jacks-bajos',
+  'Skipping bajo con braceo activo': 'skipping-bajo-braceo',
+  'Ankle pops suaves': 'ankle-pops-suaves',
+  'Drop squat / snap down': 'drop-squat-snap-down',
+  'Pogo jumps': 'pogo-jumps',
+  'Snap down + stick': 'snap-down-stick',
+  'Sentadilla con barra': 'sentadilla-barra',
+  'Press militar con barra de pie': 'press-militar-barra',
+  'Hip thrust con barra': 'hip-thrust-barra',
+  'Remo con Barra': 'remo-con-barra',
+  'Salto al cajón (box jump)': 'box-jump',
+  'Salto horizontal corto + frenado': 'salto-horizontal-frenado',
+  'Woodchopper con disco': 'woodchopper-disco',
+  "Farmer's walk con mancuernas": 'farmers-walk',
+  'Elevación de Sóleo (bajada lenta 3-4s)': 'elevacion-soleo',
+  'Movilidad suave de cadera/isquios': 'movilidad-cadera-isquios',
+  'Respiración diafragmática': 'respiracion-diafragmatica',
+  'Rotación torácica en cuadrupedia': 'rotacion-toracica-cuadrupedia',
+  'Transición 90/90': 'transicion-90-90',
+  'Movilidad de tobillo en zancada con alcance hacia delante': 'movilidad-tobillo-zancada',
+  'Skipping suave': 'skipping-suave',
+  'Hip hinge drill con palo': 'hip-hinge-drill-palo',
+  'Bisagra con palo': 'bisagra-con-palo',
+  'Skater jump corto con frenado': 'skater-jump-frenado',
+  'Salto lateral corto con estabilización arriba de un disco, banco, step o sillita': 'salto-lateral-estabilizacion',
+  'Zancada búlgara con mancuernas': 'zancada-bulgara',
+  'Press de banca con barra': 'press-banca-barra',
+  'Curl nórdico (isquiotibiales)': 'curl-nordico',
+  'Peso muerto rumano a una pierna con apoyo': 'peso-muerto-rumano-1-pierna',
+  'Paso descendente desde cajón': 'paso-descendente-cajon',
+  'Skater bound lateral': 'skater-bound-lateral',
+  'Curl femoral deslizante': 'curl-femoral-deslizante',
+  'Farmer carry unilateral': 'farmer-carry-unilateral',
+  'Salto lateral con recepción a una pierna (aterrizaje controlado)': 'salto-lateral-recepcion-1-pierna',
+  'Liberación plantar opcional': 'liberacion-plantar',
+};
+
 const WORKOUTS = [
   {
     id: 's1', type: 'max', typeName: 'Fuerza para Trail Running', month: 1,
@@ -1281,13 +1324,22 @@ function renderDetail() {
       const lastW = getLastWeight(ex.name);
       const exNameSafe = ex.name.replace(/'/g,"\\'").replace(/"/g,'&quot;');
 
+      const gifSlug = EXERCISE_GIF[ex.name];
+
       html += `<div class="exercise-item">
-        <div class="exercise-top">
-          <div class="exercise-name">${ex.name}</div>
-          ${ex.sets ? `<div class="exercise-sets">${ex.sets}</div>` : ''}
+        <div class="exercise-top" style="${gifSlug ? 'align-items:flex-start;gap:10px;' : ''}">
+          ${gifSlug ? `<img src="anim/${gifSlug}.gif" alt="Animación: ${ex.name}" loading="lazy"
+            style="width:56px;height:56px;border-radius:10px;background:var(--surface2);flex-shrink:0;object-fit:cover;" />` : ''}
+          <div style="flex:1;">
+            <div class="exercise-top" style="padding:0;border:none;">
+              <div class="exercise-name">${ex.name}</div>
+              ${ex.sets ? `<div class="exercise-sets">${ex.sets}</div>` : ''}
+            </div>
+          </div>
         </div>
         ${ex.note ? `<div class="exercise-note">💬 ${ex.note}</div>` : ''}
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px;">
+          ${gifSlug ? `<span style="font-size:10px;color:var(--text-dim);">🎞️ animación offline</span>` : ''}
           ${ex.url ? `<a class="video-btn" href="${ex.url}" target="_blank">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             Ver video
