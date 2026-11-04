@@ -1,4 +1,4 @@
-const CACHE_NAME = 'trail-train-v4';
+const CACHE_NAME = 'trail-train-v5';
 const ASSETS = [
   '/',
   '/index.html',
