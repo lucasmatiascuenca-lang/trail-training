@@ -682,7 +682,7 @@
   <div class="home-header">
     <div class="home-eyebrow">🏔️ Trail Running</div>
     <div class="home-title">TRAIN<span>ING</span><br>PLAN</div>
-    <div class="home-subtitle">Fuerza para trail running · 2 sesiones por semana · Pliometría + excéntricos</div>
+    <div class="home-subtitle">Sesiones de la semana + rutina de fuerza para trail running</div>
   </div>
 
   <div class="week-pills" id="month-pillbar" style="display:none;">
@@ -733,6 +733,335 @@
 
 <script>
 const WORKOUTS = [
+  {
+    "id": "p1",
+    "type": "pot",
+    "typeName": "Hipertrofia Específica",
+    "month": 1,
+    "name": "Hipertrofia Específica",
+    "num": "1",
+    "date": "17-11-2026",
+    "totalMin": 45,
+    "phases": [
+      {
+        "name": "Entrada en calor",
+        "time": "10'",
+        "icon": "🔥",
+        "blocks": [
+          {
+            "name": "Movilidad",
+            "time": "6'",
+            "exercises": [
+              {
+                "name": "Cossack squat dinámico",
+                "sets": "2×6/lado",
+                "url": "https://youtube.com/shorts/rA_cC0Y6TWI",
+                "note": "Movilidad frontal y lateral de cadera"
+              },
+              {
+                "name": "Knee to wall + rotación",
+                "sets": "2×8",
+                "url": "https://youtube.com/shorts/NuDipJO6uck",
+                "note": "Tobillo + tórax"
+              },
+              {
+                "name": "Wall slide + lift off",
+                "sets": "2×8",
+                "url": "https://youtube.com/shorts/ryPJH4dCL34",
+                "note": "Hombro + escápula"
+              }
+            ]
+          },
+          {
+            "name": "Activación neuromuscular",
+            "time": "4'",
+            "exercises": [
+              {
+                "name": "Medicine ball slam",
+                "sets": "3×10",
+                "url": "https://youtube.com/shorts/reIpHeafMuc",
+                "note": "Se puede simular el gesto con una mancuerna (sin tirarla al piso): la idea es activar tanto la cabeza como la parte muscular de la actividad."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Bloque Principal",
+        "time": "25'",
+        "icon": "💪",
+        "blocks": [
+          {
+            "name": "Fuerza principal",
+            "time": "15'",
+            "note": "RIR 2 · pausa 75–90\"",
+            "exercises": [
+              {
+                "name": "Goblet squat",
+                "sets": "4×10 RIR 2",
+                "url": "https://youtube.com/shorts/HFCMk5eDm6c",
+                "note": "Tempo: 3\" de descenso"
+              },
+              {
+                "name": "Peso muerto rumano",
+                "sets": "4×10 RIR 2",
+                "url": "https://youtube.com/shorts/5kYMN400cOs",
+                "note": "Mayor recorrido, con barra y tempo de 3\" de descenso."
+              },
+              {
+                "name": "Press de banca",
+                "sets": "4×10 RIR 2",
+                "url": "https://youtube.com/shorts/g4Ah9uYn8pI",
+                "note": "Carga moderada-alta; mover con control y bajar lento. Alternativa para hacer en casa: youtube.com/shorts/R3eCn7-9wC0"
+              }
+            ]
+          },
+          {
+            "name": "Accesorios",
+            "time": "10'",
+            "note": "RIR 2–3 · pausa 45–60\"",
+            "exercises": [
+              {
+                "name": "Bulgara split",
+                "sets": "3×10/lado RIR 2-3",
+                "url": "https://youtube.com/shorts/ghmxnQDR-g0"
+              },
+              {
+                "name": "Remo pecho apoyado",
+                "sets": "3×12",
+                "url": "https://youtube.com/shorts/9u5yLR9zmAs",
+                "note": "Pausa de 1\" arriba."
+              },
+              {
+                "name": "Tríceps francés con mancuerna",
+                "sets": "3×12",
+                "url": "https://youtube.com/shorts/FgN0vyx8jNE"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Preventivos y zona media",
+        "time": "10'",
+        "icon": "🛡️",
+        "blocks": [
+          {
+            "name": "Preventivos",
+            "time": "5'",
+            "exercises": [
+              {
+                "name": "Single leg balance + press de medicine ball",
+                "sets": "3×8/lado",
+                "url": "https://youtube.com/shorts/4kQMw8-cl-w",
+                "note": "Se puede hacer con mini bosu."
+              },
+              {
+                "name": "Sóleo sentado",
+                "sets": "3×12",
+                "url": "https://youtube.com/shorts/qYuqaTarT00",
+                "note": "Control escapular."
+              }
+            ]
+          },
+          {
+            "name": "Zona media",
+            "time": "5'",
+            "exercises": [
+              {
+                "name": "Dead bug + pullover con mancuerna",
+                "sets": "3×8/lado",
+                "url": "https://youtube.com/shorts/XKzse7kAe7s"
+              },
+              {
+                "name": "Bear plank + renegade drag",
+                "sets": "3×8/lado",
+                "url": "https://youtube.com/shorts/IC5HekPeUfY"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Recomendaciones",
+        "time": "",
+        "icon": "📋",
+        "blocks": [
+          {
+            "name": "Reglas de la semana",
+            "time": "1'",
+            "note": "PRINCIPALES: 8–10 repeticiones, RIR 2, pausa 75–90\". ACCESORIOS: 10–15 repeticiones, RIR 2–3, pausa 45–60\". TEMPO: en varios ejercicios, 3\" de excéntrico (bajada) para aumentar el tiempo bajo tensión sin necesitar cargas excesivas.",
+            "exercises": []
+          },
+          {
+            "name": "Recomendación nutricional",
+            "time": "1'",
+            "note": "Durante la sesión: fluidos a voluntad. Al finalizar: CHO 0.4 g/kg · PRO 0.3 g/kg · FLUIDOS 150% del peso perdido.",
+            "exercises": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "p2",
+    "type": "pot",
+    "typeName": "Hipertrofia Específica",
+    "month": 1,
+    "name": "Hipertrofia Específica II",
+    "num": "2",
+    "date": "19-11-2026",
+    "totalMin": 45,
+    "phases": [
+      {
+        "name": "Entrada en calor",
+        "time": "10'",
+        "icon": "🔥",
+        "blocks": [
+          {
+            "name": "Movilidad",
+            "time": "6'",
+            "exercises": [
+              {
+                "name": "90/90 transitions",
+                "sets": "2×6/lado",
+                "url": "https://youtube.com/shorts/GC7YJ217uoU"
+              },
+              {
+                "name": "Adductor rack",
+                "sets": "2×8/lado",
+                "url": "https://youtube.com/shorts/X3gNW62cPcU"
+              },
+              {
+                "name": "Shoulder CAR",
+                "sets": "2×5/lado",
+                "url": "https://youtube.com/shorts/ZOP6RPjdAhA"
+              }
+            ]
+          },
+          {
+            "name": "Activación",
+            "time": "4'",
+            "exercises": [
+              {
+                "name": "Medicine ball slam",
+                "sets": "3×6",
+                "url": "https://youtube.com/shorts/reIpHeafMuc"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Bloque Principal",
+        "time": "25'",
+        "icon": "💪",
+        "blocks": [
+          {
+            "name": "Principales",
+            "time": "15'",
+            "note": "RIR 2 · pausa 75–90\"",
+            "exercises": [
+              {
+                "name": "Hip thrust",
+                "sets": "4×10 RIR 2",
+                "url": "https://youtube.com/shorts/-Be-IO1C2JQ"
+              },
+              {
+                "name": "Jalón asistido / dominada",
+                "sets": "4×10 RIR 2",
+                "url": "https://youtube.com/shorts/lvPEhP8C7N0",
+                "note": "Atentis a la mesa para hacer en casa."
+              },
+              {
+                "name": "Estocada caminando con mancuernas",
+                "sets": "3×10",
+                "url": "https://youtube.com/shorts/tsyHY_g6LpI"
+              }
+            ]
+          },
+          {
+            "name": "Accesorios",
+            "time": "10'",
+            "note": "RIR 2–3 · pausa 45–60\"",
+            "exercises": [
+              {
+                "name": "Press militar sentado/a",
+                "sets": "3×10",
+                "url": "https://youtube.com/shorts/R0f2Of6SI2A",
+                "note": "Puro foco en hombros."
+              },
+              {
+                "name": "Curl femoral",
+                "sets": "3×12",
+                "url": "https://youtube.com/shorts/vos5Hofep1c",
+                "note": "Descenso: 3\"."
+              },
+              {
+                "name": "Curl de bíceps en banco inclinado",
+                "sets": "3×12/lado",
+                "url": "https://youtube.com/shorts/koLVyY5pej0"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Preventivos y control",
+        "time": "10'",
+        "icon": "🛡️",
+        "blocks": [
+          {
+            "name": "Preventivos / control",
+            "time": "10'",
+            "exercises": [
+              {
+                "name": "Single leg balance sobre mini bosu + reach",
+                "sets": "3×5 direcciones/lado",
+                "url": "https://youtube.com/shorts/bOdz7FZy4xA",
+                "note": "Desde apoyo monopodal tocar: adelante, diagonal, lateral, diagonal posterior y posterior. Muy útil para control en terreno irregular."
+              },
+              {
+                "name": "Tibial anterior",
+                "sets": "3×15-20",
+                "url": "https://youtube.com/shorts/pQcvW08rnAk"
+              },
+              {
+                "name": "Half-kneeling Pallof press + overhead",
+                "sets": "3×6/lado",
+                "url": "https://youtube.com/shorts/CKQUzPr5nDY"
+              },
+              {
+                "name": "Turkish get-up",
+                "sets": "3×2/lado",
+                "url": "https://youtube.com/shorts/-Zsx2JTfGsU",
+                "note": "Carga moderada."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Recomendaciones",
+        "time": "",
+        "icon": "📋",
+        "blocks": [
+          {
+            "name": "Reglas de la semana",
+            "time": "1'",
+            "note": "PRINCIPALES: 8–10 repeticiones, RIR 2, pausa 75–90\". ACCESORIOS: 10–15 repeticiones, RIR 2–3, pausa 45–60\". TEMPO: en varios ejercicios, 3\" de excéntrico (bajada) para aumentar el tiempo bajo tensión sin necesitar cargas excesivas.",
+            "exercises": []
+          },
+          {
+            "name": "Recomendación nutricional",
+            "time": "1'",
+            "note": "Durante la sesión: fluidos a voluntad. Al finalizar: CHO 0.4 g/kg · PRO 0.3 g/kg · FLUIDOS 150% del peso perdido.",
+            "exercises": []
+          }
+        ]
+      }
+    ]
+  },
   {
     id: 's1', type: 'max', typeName: 'Fuerza para Trail Running', month: 1,
     name: 'Sesión 1 – Fuerza + Pliometría', num: '1',
@@ -919,6 +1248,7 @@ const typeIcons = {
 };
 
 const WEEKS = [
+  { key: 'pot',   num: 2, label: 'Semana 17–19 nov',  focus: 'Hipertrofia Específica',  color: '#F39C12', icon: '⚡' },
   { key: 'max',   num: 1, label: 'Rutina',  focus: 'Fuerza para Trail Running',  color: '#E85D2F', icon: '💪' },
 ];
 
@@ -965,7 +1295,7 @@ function renderHome() {
         <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;
           color:var(--text);line-height:1;">${week.focus}</div>
         <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">
-          ${workouts.length} sesión${workouts.length !== 1 ? 'es' : ''} · 2 días/semana
+          ${workouts.length} sesión${workouts.length !== 1 ? 'es' : ''}
         </div>
       </div>
     `;
